@@ -1,11 +1,14 @@
 package by.dk.training.items.dataaccess.filters;
 
+import java.io.Serializable;
+
 import javax.persistence.metamodel.SingularAttribute;
 
 import by.dk.training.items.datamodel.Type;
 
-public class TypeFilter {
+public class TypeFilter implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private String typeName;
 	private Type parentType;
 

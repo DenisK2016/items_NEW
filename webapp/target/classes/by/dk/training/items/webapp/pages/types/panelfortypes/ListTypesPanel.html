@@ -1,0 +1,18 @@
+<wicket:panel>
+	<table cellspacing="0" class="dataview">
+		<tr>
+			<!-- <th>Actions</th> -->
+			<th wicket:id="orderById">ID</th>
+			<th wicket:id="orderByTypeName">Type name</th>
+			<th wicket:id="orderByParentTypeId">Parent type</th>
+		</tr>
+		<tr wicket:id="simple">
+			<!-- <td><span wicket:id="actions">[actions]</span></td> -->
+			<td><span wicket:id="typeid">[typeid]</span></td>
+			<td><span wicket:id="typename">[typename]</span></td>
+			<td><span wicket:id="parentname">[parentname]</span></td>
+			<td><a wicket:id="deletelink">Удалить</a></td>
+		</tr>
+	</table>
+	<span wicket:id="navigator">[dataview navigator]</span>
+</wicket:panel>

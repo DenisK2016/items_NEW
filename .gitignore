@@ -5,3 +5,5 @@ datamodel/.classpath
 services/.classpath
 dataaccess/.classpath
 *.onetoc2
+webapp/.classpath
+datamodel/.factorypath

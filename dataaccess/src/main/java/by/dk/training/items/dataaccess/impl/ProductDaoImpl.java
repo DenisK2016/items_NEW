@@ -1,6 +1,5 @@
 package by.dk.training.items.dataaccess.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -50,9 +49,15 @@ public class ProductDaoImpl extends AbstractDaoImpl<Product, Long> implements Pr
 			Predicate lProductEqualCondition = cb.equal(from.get(Product_.limit), filter.getLimitProduct());
 			Predicate pProductEqualCondition = cb.equal(from.get(Product_.priceProduct), filter.getPriceProduct());
 			Predicate statustEqualCondition = cb.equal(from.get(Product_.status), filter.getStatus());
-			Predicate typesEqualCondition = cb.isMember(filter.getTypes(), from.get(Product_.types));
-			cq.where(cb.or(nProductEqualCondition, lProductEqualCondition, pProductEqualCondition,
-					statustEqualCondition, typesEqualCondition));
+			if (types == true) {
+				Predicate typesEqualCondition = cb.isMember(filter.getTypes(), from.get(Product_.types));
+				cq.where(cb.or(nProductEqualCondition, lProductEqualCondition, pProductEqualCondition,
+						statustEqualCondition, typesEqualCondition)).distinct(true);
+			} else {
+				cq.where(cb.or(nProductEqualCondition, lProductEqualCondition, pProductEqualCondition,
+						statustEqualCondition));
+			}
+
 		}
 
 		// set fetching
@@ -75,16 +80,26 @@ public class ProductDaoImpl extends AbstractDaoImpl<Product, Long> implements Pr
 
 		// set execute query
 		List<Product> allitems = q.getResultList();
-		List<Product> all = new ArrayList<>();
-
-		for (Product pr : allitems) {
-			if (!all.contains(pr)) {
-				all.add(pr);
-			}
-		}
-		allitems = all;
 
 		return allitems;
 	}
+	
+	@Override
+	public Long count(ProductFilter filter) {
+		EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<Product> from = cq.from(Product.class);
+        cq.select(cb.count(from));
+        TypedQuery<Long> q = em.createQuery(cq);
+        return q.getSingleResult();
+	}
+	
+	protected void setPaging(ProductFilter filter, TypedQuery<Product> q) {
+        if (filter.getOffset() != null && filter.getLimit() != null) {
+            q.setFirstResult(filter.getOffset());
+            q.setMaxResults(filter.getLimit());
+        }
+    }
 
 }

@@ -5,7 +5,7 @@
 
 	<parent>
 		<groupId>by.dk.training.items</groupId>
-		<artifactId>parent-project</artifactId>
+		<artifactId>accouting_items</artifactId>
 		<version>1.0.0</version>
 	</parent>
 

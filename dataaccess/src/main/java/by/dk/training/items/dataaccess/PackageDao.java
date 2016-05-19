@@ -7,6 +7,8 @@ import by.dk.training.items.datamodel.Package;
 
 public interface PackageDao extends AbstractDao<Package, Long>{
 	
+	Long count(PackageFilter filter);
+	
 	List<Package> find(PackageFilter filter);
 	
 }

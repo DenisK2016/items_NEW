@@ -61,10 +61,16 @@ public class PackageDaoImpl extends AbstractDaoImpl<Package, Long> implements Pa
 			Predicate paidEqualCondition = cb.equal(from.get(Package_.paid), filter.getPaid());
 			Predicate userEqualCondition = cb.equal(from.get(Package_.idUser), filter.getUser());
 			Predicate recipientEqualCondition = cb.equal(from.get(Package_.idRecipient), filter.getRecipint());
-			Predicate productEqualCondition = cb.isMember(filter.getProduct(), from.get(Package_.products));
-			cq.where(cb.or(priceEqualCondition, weightEqualCondition, dateEqualCondition, descrEqualCondition,
-					countryEqualCondition, paymentEqualCondition, fineEqualCondition, paidEqualCondition,
-					userEqualCondition, recipientEqualCondition, productEqualCondition));
+			if(product == true){
+				Predicate productEqualCondition = cb.isMember(filter.getProduct(), from.get(Package_.products));
+				cq.where(cb.or(priceEqualCondition, weightEqualCondition, dateEqualCondition, descrEqualCondition,
+						countryEqualCondition, paymentEqualCondition, fineEqualCondition, paidEqualCondition,
+						userEqualCondition, recipientEqualCondition, productEqualCondition)).distinct(true);
+			} else{
+				cq.where(cb.or(priceEqualCondition, weightEqualCondition, dateEqualCondition, descrEqualCondition,
+						countryEqualCondition, paymentEqualCondition, fineEqualCondition, paidEqualCondition,
+						userEqualCondition, recipientEqualCondition)).distinct(true);
+			}
 		}
 
 		// set fetching
@@ -98,5 +104,23 @@ public class PackageDaoImpl extends AbstractDaoImpl<Package, Long> implements Pa
 
 		return allitems;
 	}
+
+	@Override
+	public Long count(PackageFilter filter) {
+		EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<Package> from = cq.from(Package.class);
+        cq.select(cb.count(from));
+        TypedQuery<Long> q = em.createQuery(cq);
+        return q.getSingleResult();
+	}
+	
+	protected void setPaging(PackageFilter filter, TypedQuery<Package> q) {
+        if (filter.getOffset() != null && filter.getLimit() != null) {
+            q.setFirstResult(filter.getOffset());
+            q.setMaxResults(filter.getLimit());
+        }
+    }
 
 }

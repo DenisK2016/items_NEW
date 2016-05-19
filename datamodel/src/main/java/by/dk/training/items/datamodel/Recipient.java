@@ -1,6 +1,6 @@
 package by.dk.training.items.datamodel;
 
-
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +15,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "recipient")
-public class Recipient {
+public class Recipient implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

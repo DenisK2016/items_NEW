@@ -1,5 +1,8 @@
 package by.dk.training.items.datamodel;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,7 +15,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "user_credentials")
-public class UserCredentials {
+public class UserCredentials implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,7 +31,7 @@ public class UserCredentials {
 	private String lastName;
 
 	@Column
-	private String created;
+	private Date created;
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -43,13 +48,13 @@ public class UserCredentials {
 	private String email;
 
 	@OneToOne(mappedBy = "userCredentials")
-	private User user;
+	private UserProfile user;
 
-	public User getUser() {
+	public UserProfile getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserProfile user) {
 		this.user = user;
 	}
 
@@ -89,11 +94,11 @@ public class UserCredentials {
 		this.lastName = lastName;
 	}
 
-	public String getCreated() {
+	public Date getCreated() {
 		return created;
 	}
 
-	public void setCreated(String created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 

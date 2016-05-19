@@ -1,12 +1,15 @@
 package by.dk.training.items.dataaccess.filters;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.metamodel.SingularAttribute;
 
 import by.dk.training.items.datamodel.Type;
 
-public class ProductFilter {
+public class ProductFilter implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	private String nameProduct;
 	private String limitProduct;

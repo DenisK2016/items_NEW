@@ -1,8 +1,12 @@
 package by.dk.training.items.dataaccess.filters;
 
+import java.io.Serializable;
+
 import javax.persistence.metamodel.SingularAttribute;
 
-public class RecipientFilter {
+public class RecipientFilter implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	private String name;
 	private String city;

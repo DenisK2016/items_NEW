@@ -1,0 +1,176 @@
+body, p, li, a {
+	font-family: georgia, times, serif;
+	font-size: 13pt;
+}
+
+h1, h2, h3 {
+	font-family: 'Yanone Kaffeesatz', arial, serif, 'Tahoma';
+}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+#hd {
+	width: 100%;
+	height: 87px;
+	background-color: #092E67;
+	margin-top: 0;
+	padding-top: 10px;
+	border-bottom: 1px solid #888;
+	z-index: 0;
+}
+
+#logo, #bd {
+	width: 1230px;
+	margin: 0 auto;
+	padding: 25px 50px 0 50px;
+}
+
+#logo h1 {
+	color: white;
+	font-size: 36pt;
+	display: inline;
+}
+
+#logo img {
+	display: inline;
+	vertical-align: bottom;
+	margin-left: -51px;
+	margin-right: 5px;
+}
+
+body {
+	margin-top: 0;
+	padding-top: 0;
+}
+
+#logo, #logo h1 {
+	margin-top: -11px;
+	padding-top: 0;
+}
+
+#bd {
+	position: absolute;
+	top: 98px;
+	bottom: 90px;
+	left: 25%;
+	margin-left: -325px;
+	z-index: 1;
+	overflow: auto;
+	background-color: #fff;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-moz-box-shadow: 0px 0px 10px #888;
+	-webkit-box-shadow: 0px 0px 10px #888;
+	box-shadow: 0px 0px 10px #888;
+}
+
+a, a:visited, a:hover, a:active {
+	color: #6493D2;
+}
+
+h2 {
+	padding: 0;
+	margin: 0;
+	font-size: 36pt;
+	color: #FF5500;
+}
+
+h3 {
+	padding: 0;
+	margin: 0;
+	font-size: 24pt;
+	color: blue;
+	margin-top: -50px;
+}
+
+#gos {
+	color: #e9e609;
+	font-size: 17pt;
+	display: inline;
+	margin-top: -11px;
+	padding-top: 0;
+	position: absolute;
+	top: 10px;
+}
+
+#tom {
+	color: #e9e609;
+	font-size: 17pt;
+	display: inline;
+	margin-top: -11px;
+	padding-top: 0;
+	position: absolute;
+	top: 30px;
+}
+
+#kom {
+	color: #e9e609;
+	font-size: 17pt;
+	display: inline;
+	margin-top: -11px;
+	padding-top: 0;
+	position: absolute;
+	top: 50px;
+}
+
+#rb {
+	color: #e9e609;
+	display: inline;
+	margin-top: -11px;
+	padding-top: 0;
+	position: absolute;
+	top: 85px;
+}
+
+.menu_size {
+	margin-left: 412px;
+	margin-top: -100px;
+	height: 40px;
+	border-radius: 0 0 0 50px;
+}
+
+.menu_collor {
+	cursor: pointer;
+	background-color: #111;
+	color: #F0FFFF;
+}
+
+.menu_fcollor {
+	cursor: pointer;
+	background-color: #111;
+	color: #F0FFFF;
+	border-radius: 0 0 0 50px;
+}
+
+.menu_collor:hover {
+	background-image: linear-gradient(#000000 30%, #ffffff 160%);
+	border: 1px solid #aaa;
+	color: #FFFFFF;
+}
+
+.menu_fcollor:hover {
+	background-image: linear-gradient(#000000 30%, #ffffff 160%);
+	border: 1px solid #aaa;
+	color: #FFFFFF;
+}
+
+.ft {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 99px;
+	background-color: #6493D2;
+	border-top: 1px solid #888;
+	z-index: 0;
+}
+
+.copyright {
+	position: absolute;
+	bottom: 10px;
+	z-index: 1;
+	margin-left: 50%;
+}

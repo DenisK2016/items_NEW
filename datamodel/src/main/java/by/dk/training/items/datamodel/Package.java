@@ -1,5 +1,6 @@
 package by.dk.training.items.datamodel;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -18,13 +19,15 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "package")
-public class Package {
+public class Package implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "id", nullable = false, unique = true)
 	private Long id;
 
-	@ManyToOne(targetEntity = Recipient.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Recipient.class, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_recipient", nullable = false)
 	private Recipient idRecipient;
 
@@ -34,9 +37,9 @@ public class Package {
 	@Column(nullable = false)
 	private Double weight;
 
-	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = UserProfile.class, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_user", nullable = false)
-	private User idUser;
+	private UserProfile idUser;
 
 	@Column(nullable = false)
 	@Temporal(value = TemporalType.TIMESTAMP)
@@ -102,11 +105,11 @@ public class Package {
 		this.weight = weight;
 	}
 
-	public User getIdUser() {
+	public UserProfile getIdUser() {
 		return idUser;
 	}
 
-	public void setIdUser(User idUser) {
+	public void setIdUser(UserProfile idUser) {
 		this.idUser = idUser;
 	}
 

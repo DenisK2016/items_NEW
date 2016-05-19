@@ -1,5 +1,6 @@
 package by.dk.training.items.dataaccess.filters;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -7,10 +8,12 @@ import javax.persistence.metamodel.SingularAttribute;
 
 import by.dk.training.items.datamodel.Product;
 import by.dk.training.items.datamodel.Recipient;
-import by.dk.training.items.datamodel.User;
+import by.dk.training.items.datamodel.UserProfile;
 
-public class PackageFilter {
+public class PackageFilter implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+	
 	private BigDecimal price;
 	private Double weight;
 	private Date date;
@@ -19,7 +22,7 @@ public class PackageFilter {
 	private String paymentDeadline;
 	private BigDecimal fine;
 	private Boolean paid;
-	private User user;
+	private UserProfile user;
 	private Recipient recipint;
 	private Product product;
 
@@ -32,11 +35,11 @@ public class PackageFilter {
 	private boolean isFetchRecipient;
 	private boolean isFetchProduct;
 
-	public User getUser() {
+	public UserProfile getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserProfile user) {
 		this.user = user;
 	}
 

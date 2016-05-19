@@ -13,7 +13,7 @@
 		<property name="hibernate.jdbc.lob.non_contextual_creation">true</property>
 		<property name="hibernate.enable_lazy_load_no_trans">true</property>
 
-		<mapping class="by.dk.training.items.datamodel.User" />	
+		<mapping class="by.dk.training.items.datamodel.UserProfile" />	
 		<mapping class="by.dk.training.items.datamodel.Product" />
 		<mapping class="by.dk.training.items.datamodel.UserCredentials" />
 		<mapping class="by.dk.training.items.datamodel.Package" />

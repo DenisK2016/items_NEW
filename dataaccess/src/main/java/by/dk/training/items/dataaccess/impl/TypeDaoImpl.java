@@ -69,5 +69,23 @@ public class TypeDaoImpl extends AbstractDaoImpl<Type, Long> implements TypeDao 
 
 		return allitems;
 	}
+	
+	@Override
+	public Long count(TypeFilter filter) {
+		EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<Type> from = cq.from(Type.class);
+        cq.select(cb.count(from));
+        TypedQuery<Long> q = em.createQuery(cq);
+        return q.getSingleResult();
+	}
+	
+	protected void setPaging(TypeFilter filter, TypedQuery<Type> q) {
+        if (filter.getOffset() != null && filter.getLimit() != null) {
+            q.setFirstResult(filter.getOffset());
+            q.setMaxResults(filter.getLimit());
+        }
+    }
 
 }
