@@ -74,6 +74,15 @@
 			<artifactId>jhighlight</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.googlecode.wicket-jquery-ui</groupId>
+			<artifactId>jquery-ui-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.wicket-jquery-ui</groupId>
+			<artifactId>wicket-jquery-ui</artifactId>
+		</dependency>
+
 
 	</dependencies>
 </project>

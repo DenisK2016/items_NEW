@@ -22,6 +22,8 @@ import by.dk.training.items.dataaccess.filters.TypeFilter;
 import by.dk.training.items.datamodel.Type;
 import by.dk.training.items.datamodel.Type_;
 import by.dk.training.items.services.TypeService;
+import by.dk.training.items.webapp.pages.types.TypePage;
+import by.dk.training.items.webapp.pages.types.formforreg.TypeRegPage;
 
 public class ListTypesPanel extends Panel {
 
@@ -32,6 +34,11 @@ public class ListTypesPanel extends Panel {
 	public ListTypesPanel(String id) {
 		super(id);
 
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		SortableTypeProvider dataProvider = new SortableTypeProvider();
 		DataView<Type> dataView = new DataView<Type>("simple", dataProvider, 5) {
 
@@ -48,24 +55,36 @@ public class ListTypesPanel extends Panel {
 				} else {
 					item.add(new Label("parentname", " "));
 				}
-				item.add(new Link("deletelink", item.getModel()) {
+				item.add(new Link<TypePage>("deletelink") {
+
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
 						typeService.delete(type.getId());
+						setResponsePage(new TypePage());
+					}
+				});
+				item.add(new Link<TypeRegPage>("updateType") {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						setResponsePage(new TypeRegPage(type));
 						
 					}
 				});
 			}
 		};
 		add(dataView);
-		
+
 		add(new OrderByBorder("orderById", Type_.id, dataProvider));
 		add(new OrderByBorder("orderByTypeName", Type_.typeName, dataProvider));
 		add(new OrderByBorder("orderByParentTypeId", Type_.parentType, dataProvider));
-		
-		add(new PagingNavigator("navigator", dataView));
 
+		add(new PagingNavigator("navigator", dataView));
+		
 	}
 
 	private class SortableTypeProvider extends SortableDataProvider<Type, Serializable> {
@@ -77,6 +96,7 @@ public class ListTypesPanel extends Panel {
 		public SortableTypeProvider() {
 			super();
 			typeFilter = new TypeFilter();
+			typeFilter.setFetchParentType(true);
 			setSort((Serializable) Type_.id, SortOrder.ASCENDING);
 		}
 
@@ -92,7 +112,7 @@ public class ListTypesPanel extends Panel {
 			typeFilter.setLimit((int) count);
 			typeFilter.setOffset((int) first);
 			return typeService.find(typeFilter).iterator();
-			
+
 		}
 
 		@Override

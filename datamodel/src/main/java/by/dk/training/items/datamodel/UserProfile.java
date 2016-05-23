@@ -35,7 +35,7 @@ public class UserProfile implements Serializable{
 	private String password;
 
 	@MapsId
-	@OneToOne(fetch = FetchType.EAGER, optional = false, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToOne(fetch = FetchType.LAZY, optional = false, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(nullable = false, updatable = false, name = "id")
 	private UserCredentials userCredentials;
 

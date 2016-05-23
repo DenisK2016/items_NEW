@@ -15,7 +15,6 @@ import by.dk.training.items.dataaccess.filters.UserFilter;
 import by.dk.training.items.datamodel.StatusUser;
 import by.dk.training.items.datamodel.UserCredentials;
 import by.dk.training.items.datamodel.UserProfile;
-import by.dk.training.items.datamodel.UserProfile_;
 import by.dk.training.items.services.UserProfileService;
 
 @Service
@@ -89,11 +88,7 @@ public class UserServiceProfileImpl implements UserProfileService {
 	public List<UserProfile> find(UserFilter userFilter) {
 
 		LOGGER.info("User find by filter: {}", userFilter);
-		if ((userFilter.getSortProperty() == UserProfile_.login) || (userFilter.getSortProperty() == UserProfile_.id)) {
-			return userDao.find(userFilter);
-		} else {
-			return userCredentialsDao.find(userFilter);
-		}
+		return userDao.find(userFilter);
 	}
 
 	@Override

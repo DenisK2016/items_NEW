@@ -1,0 +1,53 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<table class="regprod">
+		<tr>
+			<td><a wicket:id="BackToPackages">Back</a>
+				<h2>Регистрация нового пакета</h2> <br>
+				<form wicket:id="formRegPack">
+				<span wicket:id="feedback"></span>
+				<input type="text" wicket:id="id" />Введите трекинг-код:<br>
+				Выберите получчателя по Id:<br>
+				<select	wicket:id="idRecipient"></select><br>
+				<input type="text" wicket:id="price" />Цена растаможки:<br>
+				<input type="text" wicket:id="weight" />Вес всей посылки:<br>
+				Выберите инспектора посылки:<br>
+				<select	wicket:id="idUser"></select><br>
+				<input type="text" wicket:id="date" />Дата прихода:<br>
+				<input type="text" wicket:id="description" />Описание посылки:<br>
+				<input type="text" wicket:id="countrySender" />Страна отправитель:<br>
+				<input type="text" wicket:id="paymentDeadline" />Срок оплаты(пока в днях):<br>
+				<input type="text" wicket:id="fine" />Штраф:<br>
+				<span wicket:id="paid"></span><br>
+				
+				
+			    <input type="submit" wicket:id="savePack" value="Сохранить" />
+				</form></td>
+		</tr>
+		
+		<tr>
+		<td>
+		<form wicket:id="formProd">
+		<select	wicket:id="choiceProduct"></select>
+		<button type="submit" wicket:id="selectProduct">Добавить продукт</button>
+		<!-- <input wicket:id="spinner" type="text"></input> --><br>
+				<table>
+				<tr>
+				<th>Продукты в пакете</th>
+				</tr>
+				<tr wicket:id="addsProd">
+				<td><span wicket:id="addProd">products</span></td>
+				<td><a wicket:id="deleteProd">Удалить</a></td>
+				</tr>
+				<tr wicket:id="existsProd">
+				<td><b><span wicket:id="existProd">products</span></b></td>
+				<td><a wicket:id="delExistProd">Удалить</a></td>
+				</tr>
+				</table>
+				</form>
+		</td>
+		</tr>
+	</table>
+</wicket:panel>
+
+
+

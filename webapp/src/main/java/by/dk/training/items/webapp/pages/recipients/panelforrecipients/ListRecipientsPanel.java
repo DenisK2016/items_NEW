@@ -22,6 +22,8 @@ import by.dk.training.items.dataaccess.filters.RecipientFilter;
 import by.dk.training.items.datamodel.Recipient;
 import by.dk.training.items.datamodel.Recipient_;
 import by.dk.training.items.services.RecipientService;
+import by.dk.training.items.webapp.pages.recipients.RecipientPage;
+import by.dk.training.items.webapp.pages.recipients.formforreg.RecipientRegPage;
 
 public class ListRecipientsPanel extends Panel {
 
@@ -32,6 +34,11 @@ public class ListRecipientsPanel extends Panel {
 	public ListRecipientsPanel(String id) {
 		super(id);
 
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		SortableRecipientProvider dataProvider = new SortableRecipientProvider();
 		DataView<Recipient> dataView = new DataView<Recipient>("recipientlist", dataProvider, 5) {
 
@@ -45,26 +52,37 @@ public class ListRecipientsPanel extends Panel {
 				item.add(new Label("recipientname", recipient.getName()));
 				item.add(new Label("recipientcity", recipient.getCity()));
 				item.add(new Label("recipientaddress", recipient.getAddress()));
-				item.add(new Link("deletelink", item.getModel()) {
+				item.add(new Link<RecipientPage>("deletelink") {
+
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
 						recipientService.delete(recipient.getId());
-						
+						setResponsePage(new RecipientPage());
 					}
 				});
-				
+				item.add(new Link<RecipientRegPage>("updateRecipient") {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						setResponsePage(new RecipientRegPage(recipient));
+
+					}
+				});
+
 			}
 		};
 		add(dataView);
-		
+
 		add(new OrderByBorder("orderById", Recipient_.id, dataProvider));
 		add(new OrderByBorder("orderByName", Recipient_.name, dataProvider));
 		add(new OrderByBorder("orderByCity", Recipient_.city, dataProvider));
 		add(new OrderByBorder("orderByAddress", Recipient_.address, dataProvider));
-		
-		add(new PagingNavigator("navigator", dataView));
 
+		add(new PagingNavigator("navigator", dataView));
 	}
 
 	private class SortableRecipientProvider extends SortableDataProvider<Recipient, Serializable> {
@@ -91,7 +109,7 @@ public class ListRecipientsPanel extends Panel {
 			recipientFilter.setLimit((int) count);
 			recipientFilter.setOffset((int) first);
 			return recipientService.find(recipientFilter).iterator();
-			
+
 		}
 
 		@Override

@@ -23,6 +23,8 @@ import by.dk.training.items.dataaccess.filters.ProductFilter;
 import by.dk.training.items.datamodel.Product;
 import by.dk.training.items.datamodel.Product_;
 import by.dk.training.items.services.ProductService;
+import by.dk.training.items.webapp.pages.products.ProductPage;
+import by.dk.training.items.webapp.pages.products.formforreg.ProductRegPage;
 
 public class ListProductsPanel extends Panel {
 
@@ -32,7 +34,6 @@ public class ListProductsPanel extends Panel {
 
 	public ListProductsPanel(String id) {
 		super(id);
-
 		SortableProductProvider dataProvider = new SortableProductProvider();
 		DataView<Product> dataView = new DataView<Product>("productlist", dataProvider, 5) {
 
@@ -52,8 +53,18 @@ public class ListProductsPanel extends Panel {
 					@Override
 					public void onClick() {
 						productService.delete(product.getId());
-						
+						setResponsePage(new ProductPage());
+
 					}
+				});
+				item.add(new Link("updateLink", item.getModel()) {
+
+					@Override
+					public void onClick() {
+						setResponsePage(new ProductRegPage(product));
+
+					}
+
 				});
 
 			}
@@ -67,7 +78,6 @@ public class ListProductsPanel extends Panel {
 		add(new OrderByBorder("orderByStatus", Product_.status, dataProvider));
 
 		add(new PagingNavigator("navigator", dataView));
-
 	}
 
 	private class SortableProductProvider extends SortableDataProvider<Product, Serializable> {
@@ -79,6 +89,7 @@ public class ListProductsPanel extends Panel {
 		public SortableProductProvider() {
 			super();
 			productFilter = new ProductFilter();
+			productFilter.setFetchType(true);
 			setSort((Serializable) Product_.id, SortOrder.ASCENDING);
 		}
 
@@ -108,4 +119,5 @@ public class ListProductsPanel extends Panel {
 		}
 
 	}
+
 }

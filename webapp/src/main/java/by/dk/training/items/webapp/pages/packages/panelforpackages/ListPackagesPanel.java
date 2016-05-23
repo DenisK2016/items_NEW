@@ -24,6 +24,8 @@ import by.dk.training.items.dataaccess.filters.PackageFilter;
 import by.dk.training.items.datamodel.Package;
 import by.dk.training.items.datamodel.Package_;
 import by.dk.training.items.services.PackageService;
+import by.dk.training.items.webapp.pages.packages.PackagesPage;
+import by.dk.training.items.webapp.pages.packages.formforreg.PackRegPage;
 
 public class ListPackagesPanel extends Panel {
 
@@ -33,7 +35,6 @@ public class ListPackagesPanel extends Panel {
 
 	public ListPackagesPanel(String id) {
 		super(id);
-
 		SortablePackageProvider dataProvider = new SortablePackageProvider();
 		DataView<Package> dataView = new DataView<Package>("packagelist", dataProvider, 5) {
 
@@ -41,25 +42,34 @@ public class ListPackagesPanel extends Panel {
 
 			@Override
 			protected void populateItem(Item<Package> item) {
-				Package packages = item.getModelObject();
+				Package pack = item.getModelObject();
 
-				item.add(new Label("packageid", packages.getId()));
-				item.add(new Label("recipientid", packages.getIdRecipient().getId()));
-				item.add(new Label("price", packages.getPrice()));
-				item.add(new Label("weight", packages.getWeight()));
-				item.add(new Label("userid", packages.getIdUser().getId()));
-				item.add(DateLabel.forDatePattern("date", Model.of(packages.getDate()), "dd-MM-yyyy"));
-				item.add(new Label("description", packages.getDescription()));
-				item.add(new Label("countrysender", packages.getCountrySender()));
-				item.add(new Label("deadline", packages.getPaymentDeadline()));
-				item.add(new Label("fine", packages.getFine()));				
-				item.add(new CheckBox("paid", Model.of(packages.getPaid())));
+				item.add(new Label("packageid", pack.getId()));
+				item.add(new Label("recipientid", pack.getIdRecipient().getId()));
+				item.add(new Label("price", pack.getPrice()));
+				item.add(new Label("weight", pack.getWeight()));
+				item.add(new Label("userid", pack.getIdUser().getId()));
+				item.add(DateLabel.forDatePattern("date", Model.of(pack.getDate()), "dd-MM-yyyy"));
+				item.add(new Label("description", pack.getDescription()));
+				item.add(new Label("countrysender", pack.getCountrySender()));
+				item.add(new Label("deadline", pack.getPaymentDeadline()));
+				item.add(new Label("fine", pack.getFine()));
+				item.add(new CheckBox("paid", Model.of(pack.getPaid())));
 				item.add(new Link("deletelink", item.getModel()) {
 
 					@Override
 					public void onClick() {
-						packageService.delete(packages.getId());
-						
+						packageService.delete(pack.getId());
+						setResponsePage(new PackagesPage());
+					}
+				});
+				item.add(new Link<PackRegPage>("updatePack") {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						setResponsePage(new PackRegPage(pack));						
 					}
 				});
 
@@ -80,7 +90,6 @@ public class ListPackagesPanel extends Panel {
 		add(new OrderByBorder("orderByPaid", Package_.paid, dataProvider));
 
 		add(new PagingNavigator("navigator", dataView));
-
 	}
 
 	private class SortablePackageProvider extends SortableDataProvider<Package, Serializable> {
@@ -92,6 +101,9 @@ public class ListPackagesPanel extends Panel {
 		public SortablePackageProvider() {
 			super();
 			packageFilter = new PackageFilter();
+			packageFilter.setFetchProduct(true);
+			packageFilter.setFetchRecipient(true);
+			packageFilter.setFetchUser(true);
 			setSort((Serializable) Package_.id, SortOrder.ASCENDING);
 		}
 
@@ -116,9 +128,10 @@ public class ListPackagesPanel extends Panel {
 		}
 
 		@Override
-        public IModel<Package> model(Package object) {
-            return new Model(object);
-        }
+		public IModel<Package> model(Package object) {
+			return new Model(object);
+		}
 
 	}
+
 }

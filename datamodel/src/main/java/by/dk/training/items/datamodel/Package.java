@@ -27,7 +27,7 @@ public class Package implements Serializable{
 	@Column(name = "id", nullable = false, unique = true)
 	private Long id;
 
-	@ManyToOne(targetEntity = Recipient.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = Recipient.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_recipient", nullable = false)
 	private Recipient idRecipient;
 
@@ -37,7 +37,7 @@ public class Package implements Serializable{
 	@Column(nullable = false)
 	private Double weight;
 
-	@ManyToOne(targetEntity = UserProfile.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = UserProfile.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_user", nullable = false)
 	private UserProfile idUser;
 

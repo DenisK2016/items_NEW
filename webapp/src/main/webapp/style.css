@@ -174,3 +174,12 @@ h3 {
 	z-index: 1;
 	margin-left: 50%;
 }
+
+.regprod {
+	position: absolute;
+	z-index: 3;
+	width: 95%;
+	height: 80%;
+	background-color: #d5d5c9;
+	margin-top: -20%;
+}

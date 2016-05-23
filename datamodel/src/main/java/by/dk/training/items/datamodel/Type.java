@@ -1,6 +1,8 @@
 package by.dk.training.items.datamodel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,11 +13,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "type")
-public class Type implements Serializable{
+public class Type implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -24,12 +27,23 @@ public class Type implements Serializable{
 	@Column(nullable = false)
 	private Long id;
 
-	@Column(name = "type_name", nullable = false)
+	@Column(name = "type_name", nullable = false, unique = true)
 	private String typeName;
 
-	@ManyToOne(targetEntity = Type.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(targetEntity = Type.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "parent_type", referencedColumnName = "id")
 	private Type parentType;
+
+	@OneToMany(mappedBy = "parentType", fetch = FetchType.LAZY)
+	private List<Type> childTypes = new ArrayList<>();
+
+	public List<Type> getChildTypes() {
+		return childTypes;
+	}
+
+	public void setChildTypes(Type childTypes) {
+		this.childTypes.add(childTypes);
+	}
 
 	public Type() {
 		super();
@@ -58,8 +72,6 @@ public class Type implements Serializable{
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
 	}
-
-	
 
 	@Override
 	public String toString() {

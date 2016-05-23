@@ -22,33 +22,43 @@ public class TypeServiceImpl implements TypeService {
 
 	@Override
 	public void register(Type type) {
+		Type t = new Type();;
+		if (type.getParentType() != null) {
+			t = type.getParentType();
+			type.setParentType(null);
+		}
 		typeDao.insert(type);
-		
+		if (t.getId() != null) {
+			type.setParentType(t);
+			typeDao.update(type);
+			type.getParentType().setChildTypes(type);
+		}
+
 		LOGGER.info("Type register: {}", type);
 	}
 
 	@Override
 	public Type get(Long id) {
-		
+
 		LOGGER.info("Type select: {}", typeDao.get(id));
-		
+
 		return typeDao.get(id);
 	}
 
 	@Override
 	public void update(Type type) {
-		
+
 		LOGGER.info("Type update, new and old: {}", type, typeDao.get(type.getId()));
-		
+
 		typeDao.update(type);
 
 	}
 
 	@Override
 	public void delete(Long id) {
-		
+
 		LOGGER.info("Type delete: {}", typeDao.get(id));
-		
+
 		List<Type> types = getAll();
 		for (Type t : types) {
 			Type parT = t.getParentType();
@@ -62,25 +72,25 @@ public class TypeServiceImpl implements TypeService {
 
 	@Override
 	public List<Type> find(TypeFilter typeFilter) {
-		
+
 		LOGGER.info("Type find by filter: {}", typeFilter);
-		
+
 		return typeDao.find(typeFilter);
 	}
 
 	@Override
 	public List<Type> getAll() {
-		
+
 		LOGGER.info("Type getAll: {}", "All Types");
-		
+
 		return typeDao.getAll();
 	}
 
 	@Override
 	public Long count(TypeFilter filter) {
-		
+
 		LOGGER.info("Type count: {}", filter);
-		
+
 		return typeDao.count(filter);
 	}
 

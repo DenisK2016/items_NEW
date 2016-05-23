@@ -24,6 +24,8 @@ import by.dk.training.items.datamodel.UserCredentials_;
 import by.dk.training.items.datamodel.UserProfile;
 import by.dk.training.items.datamodel.UserProfile_;
 import by.dk.training.items.services.UserProfileService;
+import by.dk.training.items.webapp.pages.users.UserPage;
+import by.dk.training.items.webapp.pages.users.formforreg.UserRegPage;
 
 public class ListUsersPanel extends Panel {
 
@@ -34,6 +36,11 @@ public class ListUsersPanel extends Panel {
 	public ListUsersPanel(String id) {
 		super(id);
 
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		SortableUsersProvider dataProvider = new SortableUsersProvider();
 		DataView<UserProfile> dataView = new DataView<UserProfile>("userlist", dataProvider, 5) {
 
@@ -47,17 +54,30 @@ public class ListUsersPanel extends Panel {
 				item.add(new Label("userlogin", userProfile.getLogin()));
 				item.add(new Label("userfname", userProfile.getUserCredentials().getFirstName()));
 				item.add(new Label("userlname", userProfile.getUserCredentials().getLastName()));
-				item.add(DateLabel.forDatePattern("usercreated", Model.of(userProfile.getUserCredentials().getCreated()), "dd-MM-yyyy"));
+				item.add(DateLabel.forDatePattern("usercreated",
+						Model.of(userProfile.getUserCredentials().getCreated()), "dd-MM-yyyy"));
 				item.add(new Label("userstatus", userProfile.getUserCredentials().getStatus()));
 				item.add(new Label("userpost", userProfile.getUserCredentials().getPost()));
 				item.add(new Label("userrank", userProfile.getUserCredentials().getRank()));
 				item.add(new Label("useremail", userProfile.getUserCredentials().getEmail()));
-				item.add(new Link("deletelink", item.getModel()) {
+				item.add(new Link<UserPage>("deletelink") {
+
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
 						userProfileService.delete(userProfile.getId());
-						
+						setResponsePage(new UserPage());
+					}
+				});
+				item.add(new Link<UserRegPage>("updateUser") {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						setResponsePage(new UserRegPage(userProfile));
+
 					}
 				});
 
@@ -76,7 +96,6 @@ public class ListUsersPanel extends Panel {
 		add(new OrderByBorder("orderByMail", UserCredentials_.email, dataProvider));
 
 		add(new PagingNavigator("navigator", dataView));
-
 	}
 
 	private class SortableUsersProvider extends SortableDataProvider<UserProfile, Serializable> {
@@ -88,6 +107,7 @@ public class ListUsersPanel extends Panel {
 		public SortableUsersProvider() {
 			super();
 			userFilter = new UserFilter();
+			userFilter.setFetchCredentials(true);
 			setSort((Serializable) UserProfile_.id, SortOrder.ASCENDING);
 		}
 

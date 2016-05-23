@@ -1,0 +1,27 @@
+<wicket:panel>
+	<table class="regprod">
+		<tr>
+			<td><a wicket:id="BackToUsers">Back</a>
+				<h2>Регистрация нового пользователя</h2> <br>
+				<form wicket:id="formRegUser">
+					<span wicket:id="feedback" /> 
+					<input type="text" wicket:id="login" />Логин<br> 
+					<input type="text" wicket:id="password" />Пароль<br> 
+					<input type="text" wicket:id="firstName" />Имя<br> 
+					<input type="text" wicket:id="lastName" />Фамилия<br> 
+					<input type="text" wicket:id="email" />email<br> 
+					<input type="text" wicket:id="created" />Дата создания<br>
+					Роль пользователя:<br>
+					<select wicket:id="status"></select><br>
+					<input type="text" wicket:id="post" />Занимаемая должность<br>
+					<select wicket:id="rank"></select>Звание<br>					
+					
+					<input type="submit" wicket:id="saveUser" value="Сохранить" />
+				</form>
+			</td>
+		</tr>
+	</table>
+</wicket:panel>
+
+
+

@@ -4,6 +4,7 @@ import org.apache.wicket.markup.html.link.Link;
 
 import by.dk.training.items.webapp.pages.AbstractPage;
 import by.dk.training.items.webapp.pages.home.HomePage;
+import by.dk.training.items.webapp.pages.types.formforreg.TypeRegPage;
 import by.dk.training.items.webapp.pages.types.panelfortypes.ListTypesPanel;
 
 public class TypePage extends AbstractPage {
@@ -12,6 +13,12 @@ public class TypePage extends AbstractPage {
 
 	public TypePage() {
 		super();
+
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		add(new Link("Back") {
 
 			private static final long serialVersionUID = 1L;
@@ -21,8 +28,14 @@ public class TypePage extends AbstractPage {
 				setResponsePage(new HomePage());
 			}
 		});
-		
-		add(new ListTypesPanel("list-panel"));
 
+		add(new ListTypesPanel("list-panel"));
+		
+		add(new Link("CreateType") {
+			@Override
+			public void onClick() {
+				setResponsePage(new TypeRegPage());
+			}
+		});
 	}
 }

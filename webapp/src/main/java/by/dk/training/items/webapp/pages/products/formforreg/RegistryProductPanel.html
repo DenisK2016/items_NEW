@@ -1,0 +1,34 @@
+<wicket:panel>
+	<table class="regprod">
+		<tr>
+			<td><a wicket:id="BackToProducts">Back</a>
+				<h2>Регистрация нового продукта</h2> <br>
+				<form wicket:id="formreg">
+					<span wicket:id="feedback" /> <input type="text"
+						wicket:id="nameProduct" />Имя Продукта<br> <input
+						type="text" wicket:id="limit" />Лимит продукта<br> <input
+						type="text" wicket:id="priceProduct" /> Цена раcтаможки продукта<br>
+					<span wicket:id="status"></span><br> <select
+						wicket:id="listType"></select> <input type="submit"
+						wicket:id="saveType" value="Добавить тип" /><br>
+					<table border="1">
+						<tr>
+							<th>Существующие типы продукта</th>
+						</tr>
+						<tr wicket:id="existType">
+							<td><span wicket:id="existTypes">types</span></td>
+							<td><a wicket:id="deleteType">Удалить</a></td>
+						</tr>
+						<tr wicket:id="addTypes">
+							<td><b><span wicket:id="addType">types</span></b></td>
+							<td><a wicket:id="dellType">Удалить</a></td>
+						</tr>
+					</table>
+					<input type="submit" wicket:id="sendButton" value="Сохранить" />
+				</form></td>
+		</tr>
+	</table>
+</wicket:panel>
+
+
+
