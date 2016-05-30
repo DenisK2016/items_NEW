@@ -1,9 +1,10 @@
 <wicket:panel>
 	<table cellspacing="0" class="dataview">
 		<tr>
-			<!-- <th>Actions</th> -->
+			<th></th>
 			<th wicket:id="orderById">ID</th>
 			<th wicket:id="orderByLogin">Login</th>
+			<th wicket:id="orderByPassword">Password</th>
 			<th wicket:id="orderByFName">First name</th>
 			<th wicket:id="orderByLName">Last name</th>
 			<th wicket:id="orderByCreated">Created</th>
@@ -13,9 +14,10 @@
 			<th wicket:id="orderByMail">User email</th>
 		</tr>
 		<tr wicket:id="userlist">
-			<!-- <td><span wicket:id="actions">[actions]</span></td> -->
+			<td><a wicket:id="infoUser">Выбрать</a></td>
 			<td><span wicket:id="userid">[userid]</span></td>
 			<td><span wicket:id="userlogin">[userlogin]</span></td>
+			<td><span wicket:id="userpassword">[userPassword]</span></td>
 			<td><span wicket:id="userfname">[userfname]</span></td>
 			<td><span wicket:id="userlname">[userlname]</span></td>
 			<td><span wicket:id="usercreated">[usercreated]</span></td>
@@ -23,8 +25,10 @@
 			<td><span wicket:id="userpost">[userpost]</span></td>
 			<td><span wicket:id="userrank">[userrank]</span></td>
 			<td><span wicket:id="useremail">[useremail]</span></td>
-			<td><a wicket:id="deletelink">Удалить</a>/<a wicket:id="updateUser">Изменить</a></td>
+			<td><a wicket:id="deletelink">Удалить</a>/<a
+				wicket:id="updateUser">Изменить</a></td>
 		</tr>
 	</table>
 	<span wicket:id="navigator">[dataview navigator]</span>
+	<div wicket:id="modal1"></div>
 </wicket:panel>

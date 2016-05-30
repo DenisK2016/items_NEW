@@ -1,10 +1,13 @@
 package by.dk.training.items.webapp.pages.users.formforreg;
 
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+
 import by.dk.training.items.datamodel.UserProfile;
 import by.dk.training.items.webapp.pages.AbstractPage;
 
+@AuthorizeInstantiation(value = { "ADMIN", "OFFICER", "COMMANDER" })
 public class UserRegPage extends AbstractPage {
-	
+
 	private static final long serialVersionUID = 1L;
 	private UserProfile userProfile;
 
@@ -12,7 +15,7 @@ public class UserRegPage extends AbstractPage {
 		super();
 
 	}
-	
+
 	public UserRegPage(UserProfile userProfile) {
 		super();
 		this.userProfile = userProfile;
@@ -22,11 +25,11 @@ public class UserRegPage extends AbstractPage {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		if(userProfile != null){
+		if (userProfile != null) {
 			add(new RegistryUserPanel("regPanUser", userProfile));
-		}else{
+		} else {
 			add(new RegistryUserPanel("regPanUser"));
 		}
-		
+
 	}
 }

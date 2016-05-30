@@ -1,5 +1,6 @@
 package by.dk.training.items.webapp.pages.users;
 
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.link.Link;
 
 import by.dk.training.items.webapp.pages.AbstractPage;
@@ -7,6 +8,7 @@ import by.dk.training.items.webapp.pages.home.HomePage;
 import by.dk.training.items.webapp.pages.users.formforreg.UserRegPage;
 import by.dk.training.items.webapp.pages.users.panelforusers.ListUsersPanel;
 
+@AuthorizeInstantiation(value = { "ADMIN" })
 public class UserPage extends AbstractPage {
 
 	public UserPage() {
@@ -25,9 +27,9 @@ public class UserPage extends AbstractPage {
 		});
 
 		add(new ListUsersPanel("list-panel"));
-		
+
 		add(new Link<UserRegPage>("createUser") {
-			
+
 			private static final long serialVersionUID = 1L;
 
 			@Override

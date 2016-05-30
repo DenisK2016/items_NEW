@@ -1,22 +1,32 @@
 <wicket:panel>
 	<table cellspacing="0" class="dataview">
 		<tr>
-			<!-- <th>Actions</th> -->
+			<th></th>
 			<th wicket:id="orderById">ID</th>
 			<th wicket:id="orderByProductName">Product name</th>
 			<th wicket:id="orderByPrice">Price</th>
 			<th wicket:id="orderByLimit">Limit</th>
 			<th wicket:id="orderByStatus">Status</th>
+			<wicket:enclosure child="orderByUser">
+				<th wicket:id="orderByUser">User</th>
+			</wicket:enclosure>
+
 		</tr>
 		<tr wicket:id="productlist">
-			<!-- <td><span wicket:id="actions">[actions]</span></td> -->
+			<td><a wicket:id="infoProduct">Выбрать</a></td>
 			<td><span wicket:id="productid">[productid]</span></td>
 			<td><span wicket:id="productname">[productname]</span></td>
 			<td><span wicket:id="productprice">[productprice]</span></td>
 			<td><span wicket:id="productlimit">[productlimit]</span></td>
 			<td><input type="checkbox" wicket:id="productstatus"></input></td>
-			<td><a wicket:id="deletelink">Удалить</a>/<a wicket:id="updateLink">Изменить</a></td>
+			<wicket:enclosure child="idUser">
+				<td><span wicket:id="idUser">[users]</span></td>
+			</wicket:enclosure>
+			<td><wicket:enclosure child="deletelink">
+					<a wicket:id="deletelink">Удалить</a>
+				</wicket:enclosure> <a wicket:id="updateLink">Изменить</a></td>
 		</tr>
 	</table>
 	<span wicket:id="navigator">[dataview navigator]</span>
+	<div wicket:id="modal1"></div>
 </wicket:panel>

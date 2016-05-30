@@ -6,7 +6,13 @@ import java.util.Iterator;
 import javax.inject.Inject;
 import javax.persistence.metamodel.SingularAttribute;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.WindowClosedCallback;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
@@ -27,6 +33,7 @@ import by.dk.training.items.services.UserProfileService;
 import by.dk.training.items.webapp.pages.users.UserPage;
 import by.dk.training.items.webapp.pages.users.formforreg.UserRegPage;
 
+@AuthorizeAction(roles = { "ADMIN" }, action = Action.RENDER)
 public class ListUsersPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
@@ -41,6 +48,19 @@ public class ListUsersPanel extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+
+		final ModalWindow modal1 = new ModalWindow("modal1");
+		modal1.setTitle("Информация о получателе");
+		modal1.setWindowClosedCallback(new WindowClosedCallback() {
+
+			@Override
+			public void onClose(AjaxRequestTarget target) {
+				target.add(ListUsersPanel.this);
+
+			}
+		});
+		this.setOutputMarkupId(true);
+		add(modal1);
 		SortableUsersProvider dataProvider = new SortableUsersProvider();
 		DataView<UserProfile> dataView = new DataView<UserProfile>("userlist", dataProvider, 5) {
 
@@ -50,8 +70,16 @@ public class ListUsersPanel extends Panel {
 			protected void populateItem(Item<UserProfile> item) {
 				UserProfile userProfile = item.getModelObject();
 
+				item.add(new AjaxLink<Void>("infoUser") {
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						modal1.setContent(new UserInfo(modal1, userProfile));
+						modal1.show(target);
+					}
+				});
 				item.add(new Label("userid", userProfile.getId()));
 				item.add(new Label("userlogin", userProfile.getLogin()));
+				item.add(new Label("userpassword", userProfile.getPassword()));
 				item.add(new Label("userfname", userProfile.getUserCredentials().getFirstName()));
 				item.add(new Label("userlname", userProfile.getUserCredentials().getLastName()));
 				item.add(DateLabel.forDatePattern("usercreated",
@@ -87,6 +115,7 @@ public class ListUsersPanel extends Panel {
 
 		add(new OrderByBorder("orderById", UserProfile_.id, dataProvider));
 		add(new OrderByBorder("orderByLogin", UserProfile_.login, dataProvider));
+		add(new OrderByBorder("orderByPassword", UserProfile_.password, dataProvider));
 		add(new OrderByBorder("orderByFName", UserCredentials_.firstName, dataProvider));
 		add(new OrderByBorder("orderByLName", UserCredentials_.lastName, dataProvider));
 		add(new OrderByBorder("orderByCreated", UserCredentials_.created, dataProvider));

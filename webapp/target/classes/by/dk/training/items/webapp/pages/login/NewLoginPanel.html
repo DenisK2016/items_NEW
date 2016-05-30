@@ -1,0 +1,21 @@
+<wicket:panel>
+	<table class="regprod">
+		<tr>
+			<td>
+				<form wicket:id="formRegUser">
+					<span wicket:id="feedback" /> <input type="text" wicket:id="login" />Логин<br>
+					<input type="text" wicket:id="password" />Пароль<br> <input
+						type="text" wicket:id="firstName" />Имя<br> <input
+						type="text" wicket:id="lastName" />Фамилия<br> <input
+						type="text" wicket:id="email" />email<br> <input type="text"
+						wicket:id="post" />Занимаемая должность<br> <select
+						wicket:id="rank"></select>Звание<br> <input type="submit"
+						wicket:id="save" value="Сохранить" /> <a wicket:id="cancel">Отменить</a>
+				</form>
+			</td>
+		</tr>
+	</table>
+	<wicket:fragment wicket:id="tooltip-fragment">
+		<span wicket:id="name" class="fragment">[description]</span>
+	</wicket:fragment>
+</wicket:panel>

@@ -13,13 +13,14 @@ body {
 }
 
 #hd {
+	position: absolute;
 	width: 100%;
 	height: 87px;
 	background-color: #092E67;
 	margin-top: 0;
 	padding-top: 10px;
 	border-bottom: 1px solid #888;
-	z-index: 0;
+	z-index: 5;
 }
 
 #logo, #bd {
@@ -182,4 +183,56 @@ h3 {
 	height: 80%;
 	background-color: #d5d5c9;
 	margin-top: -20%;
+}
+
+.fragment {
+	margin-top: -100px;
+	z-index: 4;
+	position: absolute;
+	width: 10%;
+	margin-left: 220px;
+	font-size: small;
+	background-color: #ffff80;
+}
+
+.submenu_size {
+	margin-left: 1210px;
+	margin-top: 0px;
+	height: 58px;
+	position: absolute;
+	width: 165px;
+	height: 90px;
+	border-top: 1px solid white;
+	border-collapse: collapse;
+	display: none;
+}
+
+.submenu_collor {
+	cursor: pointer;
+	background-color: #111;
+	color: #F0FFFF;
+	width: 165px;
+	height: 45px;
+}
+
+.submenu_collor:hover {
+	background-image: linear-gradient(#000000 30%, #ffffff 160%);
+	color: #FFFFFF;
+}
+
+.submenu_admin {
+	margin-left: 1229px;
+	margin-top: 0px;
+	height: 58px;
+	position: absolute;
+	width: 165px;
+	height: 90px;
+	border-top: 1px solid white;
+	border-collapse: collapse;
+	display: none;
+}
+
+.wizard_style {
+	z-index: 4;
+	position: absolute;
 }

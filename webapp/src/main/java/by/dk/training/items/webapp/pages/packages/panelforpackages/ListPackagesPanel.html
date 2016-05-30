@@ -1,7 +1,7 @@
 <wicket:panel>
 	<table cellspacing="0" class="dataview">
 		<tr>
-			<!-- <th>Actions</th> -->
+			<th></th>
 			<th wicket:id="orderById">ID</th>
 			<th wicket:id="orderByRec">Recipient</th>
 			<th wicket:id="orderByPrice">Price</th>
@@ -15,7 +15,7 @@
 			<th wicket:id="orderByPaid">Paid</th>
 		</tr>
 		<tr wicket:id="packagelist">
-			<!-- <td><span wicket:id="actions">[actions]</span></td> -->
+			<td><a wicket:id="infoPackage">Выбрать</a></td>
 			<td><span wicket:id="packageid">[packageid]</span></td>
 			<td><span wicket:id="recipientid">[recipientid]</span></td>
 			<td><span wicket:id="price">[price]</span></td>
@@ -27,8 +27,10 @@
 			<td><span wicket:id="deadline">[deadline]</span></td>
 			<td><span wicket:id="fine">[fine]</span></td>
 			<td><input type="checkbox" wicket:id="paid"></input></td>
-			<td><a wicket:id="deletelink">Удалить</a>/<a wicket:id="updatePack">Изменить</a></td>
+			<td><a wicket:id="deletelink">Удалить</a><a
+				wicket:id="updatePack">Изменить</a></td>
 		</tr>
 	</table>
 	<span wicket:id="navigator">[dataview navigator]</span>
+	<div wicket:id="modal1"></div>
 </wicket:panel>

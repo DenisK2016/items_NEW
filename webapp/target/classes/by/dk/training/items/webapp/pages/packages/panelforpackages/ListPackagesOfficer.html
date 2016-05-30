@@ -1,0 +1,31 @@
+<wicket:panel>
+	<table cellspacing="0" class="dataview">
+		<tr>
+			<th></th>
+			<th wicket:id="orderById">ID</th>
+			<th wicket:id="orderByPrice">Price</th>
+			<th wicket:id="orderByWeight">Weight</th>
+			<th wicket:id="orderByDate">Date</th>
+			<th wicket:id="orderByDesc">Description</th>
+			<th wicket:id="orderBySend">Country sender</th>
+			<th wicket:id="orderByDead">Payment deadline</th>
+			<th wicket:id="orderByFine">Fine</th>
+			<th wicket:id="orderByPaid">Paid</th>
+		</tr>
+		<tr wicket:id="packagelist">
+			<td><a wicket:id="infoPackage">Выбрать</a></td>
+			<td><span wicket:id="packageid">[packageid]</span></td>
+			<td><span wicket:id="price">[price]</span></td>
+			<td><span wicket:id="weight">[weight]</span></td>
+			<td><span wicket:id="date">[date]</span></td>
+			<td><span wicket:id="description">[description]</span></td>
+			<td><span wicket:id="countrysender">[countrysender]</span></td>
+			<td><span wicket:id="deadline">[deadline]</span></td>
+			<td><span wicket:id="fine">[fine]</span></td>
+			<td><input type="checkbox" wicket:id="paid"></input></td>
+			<td><a wicket:id="updatePack">Изменить</a></td>
+		</tr>
+	</table>
+	<span wicket:id="navigator">[dataview navigator]</span>
+	<div wicket:id="modal1"></div>
+</wicket:panel>

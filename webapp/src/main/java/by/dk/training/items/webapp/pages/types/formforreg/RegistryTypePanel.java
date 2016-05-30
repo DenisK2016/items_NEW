@@ -5,21 +5,32 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.widget.tooltip.CustomTooltipBehavior;
+
 import by.dk.training.items.datamodel.Type;
 import by.dk.training.items.services.TypeService;
+import by.dk.training.items.webapp.app.AuthorizedSession;
 import by.dk.training.items.webapp.pages.types.TypePage;
 
+@AuthorizeAction(roles = { "ADMIN", "COMMANDER", "OFFICER" }, action = Action.RENDER)
 public class RegistryTypePanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
@@ -30,6 +41,11 @@ public class RegistryTypePanel extends Panel {
 	private List<Type> listType = typeService.getAll();
 	private String inTypes;
 	private List<String> namesType = new ArrayList<>();
+	private String descName = "Введите имя типа продукта";
+	private String descParType = "Здесь можно выбрать тип, к которому относится создаваемый тип.";
+	private String descSubmit = "Сохранить тип";
+	private String descLink = "На страницу с продуктами.";
+	private List<String> listParentsName;
 
 	public String getInTypes() {
 		return inTypes;
@@ -61,6 +77,7 @@ public class RegistryTypePanel extends Panel {
 		typeName.setRequired(true);
 		typeName.add(StringValidator.maximumLength(100));
 		typeName.add(StringValidator.minimumLength(2));
+		typeName.add(new CoverTooltipBehavior(descName, null));
 
 		form.add(typeName);
 
@@ -70,7 +87,7 @@ public class RegistryTypePanel extends Panel {
 			namesType.add(i, nt);
 		}
 
-		List<String> listParentsName = new ArrayList<>();
+		listParentsName = new ArrayList<>();
 		List<Type> listTypeCopy = new ArrayList<>(listType);
 		while (!listTypeCopy.isEmpty()) {
 			for (int i = 0; i < listTypeCopy.size(); i++) {
@@ -113,9 +130,15 @@ public class RegistryTypePanel extends Panel {
 			}
 		}
 
+		if (type.getParentType() != null) {
+			int i = namesType.indexOf(type.getParentType().getTypeName());
+			inTypes = listParentsName.get(i);
+		}
+
 		DropDownChoice<String> dropDown = new DropDownChoice<String>("ParentTypes",
 				new PropertyModel<String>(this, "inTypes"), listParentsName);
 		dropDown.setNullValid(true);
+		dropDown.add(new CoverTooltipBehavior(descParType, null));
 		form.add(dropDown);
 
 		form.add(new SubmitLink("saveType") {
@@ -135,6 +158,7 @@ public class RegistryTypePanel extends Panel {
 				}
 
 				if (type.getId() == null) {
+					type.setIdUser(AuthorizedSession.get().getUser());
 					typeService.register(type);
 				} else {
 					typeService.update(type);
@@ -142,7 +166,7 @@ public class RegistryTypePanel extends Panel {
 
 				setResponsePage(new TypePage());
 			}
-		});
+		}.add(new CoverTooltipBehavior(descSubmit, null)));
 
 		add(form);
 
@@ -155,7 +179,39 @@ public class RegistryTypePanel extends Panel {
 				setResponsePage(new TypePage());
 
 			}
-		});
+		}.add(new CoverTooltipBehavior(descLink, null)));
+
+	}
+
+	private static Options newOptions() {
+		Options options = new Options();
+		options.set("track", true);
+		options.set("hide", "{ effect: 'drop', delay: 100 }");
+
+		return options;
+	}
+
+	class CoverTooltipBehavior extends CustomTooltipBehavior {
+		private static final long serialVersionUID = 1L;
+
+		private final String name;
+		private final String url;
+
+		public CoverTooltipBehavior(String name, String url) {
+			super(newOptions());
+
+			this.name = name;
+			this.url = url;
+		}
+
+		@Override
+		protected WebMarkupContainer newContent(String markupId) {
+			Fragment fragment = new Fragment(markupId, "tooltip-fragment", RegistryTypePanel.this);
+			fragment.add(new Label("name", Model.of(this.name)));
+			// fragment.add(new ContextImage("cover", Model.of(this.url)));
+
+			return fragment;
+		}
 
 	}
 

@@ -1,20 +1,28 @@
 <wicket:panel>
 	<table cellspacing="0" class="dataview">
 		<tr>
-			<!-- <th>Actions</th> -->
+			<th></th>
 			<th wicket:id="orderById">ID</th>
 			<th wicket:id="orderByName">Name</th>
 			<th wicket:id="orderByCity">City</th>
 			<th wicket:id="orderByAddress">Address</th>
+			<wicket:enclosure child="orderByUser">
+				<th wicket:id="orderByUser">User</th>
+			</wicket:enclosure>
 		</tr>
 		<tr wicket:id="recipientlist">
-			<!-- <td><span wicket:id="actions">[actions]</span></td> -->
+			<td><a wicket:id="infoRecipient">Выбрать</a></td>
 			<td><span wicket:id="recipientid">[recipientid]</span></td>
 			<td><span wicket:id="recipientname">[recipientname]</span></td>
 			<td><span wicket:id="recipientcity">[recipientcity]</span></td>
 			<td><span wicket:id="recipientaddress">[recipientaddress]</span></td>
-			<td><a wicket:id="deletelink">Удалить</a>/<a wicket:id="updateRecipient">Изменить</a></td>
+			<wicket:enclosure child="idUser">
+				<td><span wicket:id="idUser">[users]</span></td>
+			</wicket:enclosure>
+			<td><a wicket:id="deletelink">Удалить</a> <a
+				wicket:id="updateRecipient">Изменить</a></td>
 		</tr>
 	</table>
 	<span wicket:id="navigator">[dataview navigator]</span>
+	<div wicket:id="modal1"></div>
 </wicket:panel>

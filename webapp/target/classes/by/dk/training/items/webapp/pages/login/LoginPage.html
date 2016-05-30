@@ -1,0 +1,37 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+<meta charset="utf-8" />
+<title>Apache Wicket Quickstart</title>
+<link
+	href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold'
+	rel='stylesheet' type='text/css' />
+
+
+</head>
+<body>
+
+	<div class="login">
+		<h1>Login</h1>
+		<form wicket:id="form">
+			<p class="input">
+				<input type="text" wicket:id="username" autocomplete="off"
+					title="Введите имя пользователя" />
+			</p>
+			<p class="input">
+				<input type="password" wicket:id="password" title="Введите пароль" />
+			</p>
+			<button type="submit" class="btn waves-effect" wicket:id="submit-btn"
+				title="Войти">
+				<b>login</b>
+			</button>
+			<div wicket:id="feedbackpanel"></div>
+		</form>
+
+	</div>
+	<a wicket:id="newUser">Регистрация нового пользователя</a>
+	<div wicket:id="modal1"></div>
+	<br>
+	<a wicket:id="passwordRestore">Восстановление пароля</a>
+	<div wicket:id="modal2"></div>
+</body>
+</html>

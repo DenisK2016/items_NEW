@@ -7,31 +7,39 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.extensions.markup.html.form.palette.Palette;
+import org.apache.wicket.extensions.markup.html.form.palette.theme.DefaultTheme;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.widget.tooltip.CustomTooltipBehavior;
 
 import by.dk.training.items.dataaccess.filters.ProductFilter;
 import by.dk.training.items.datamodel.Product;
 import by.dk.training.items.datamodel.Type;
 import by.dk.training.items.services.ProductService;
 import by.dk.training.items.services.TypeService;
+import by.dk.training.items.webapp.app.AuthorizedSession;
 import by.dk.training.items.webapp.pages.products.ProductPage;
 
+@AuthorizeAction(roles = { "ADMIN", "COMMANDER", "OFFICER" }, action = Action.RENDER)
 public class RegistryProductPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
@@ -48,14 +56,33 @@ public class RegistryProductPanel extends Panel {
 	private ArrayList<String> inTypes = new ArrayList<>();
 	private List<String> inAddTypes = new ArrayList<>();
 
-	public RegistryProductPanel(String id) {
+	List<Type> existTypesProd;
+	List<String> existNameTypesProd = new ArrayList<String>();
+
+	private ProductRegPage page;
+	private String descLimit = "Здесь вводится какое количество продуктов в год можно ввести в страну и еденицы измерения.";
+	private String descName = "Здесь вводится конкретное название(марка) продукта. Например \"Lenovo Z510\"";
+	private String descPrice = "Цена растаможки за каждую еденицу продукта, при привышении указанного лимита ввоза.";
+	private String descStatus = "Статус продукта определяет разрешение на ввоз в страну.";
+	private String descTypes = "Типы продукта. Типов может быть несколько.Паррент типы добавляются автоматически.";
+	private String descDellType = "Удалить добавленный тип";
+	private String descDellExType = "Удалить существующий тип";
+	private String saveProd = "Сохранить продукт";
+	private String addType = "Добавить тип";
+	private String descLink = "На страницу с продуктами.";
+
+	public RegistryProductPanel(String id, ProductRegPage page) {
 		super(id);
 		product = new Product();
+		existTypesProd = new ArrayList<>();
+		this.page = page;
 	}
 
-	public RegistryProductPanel(String id, Product product) {
+	public RegistryProductPanel(String id, Product product, ProductRegPage page) {
 		super(id);
 		this.product = product;
+		existTypesProd = this.product.getTypes();
+		this.page = page;
 	}
 
 	@Override
@@ -68,31 +95,37 @@ public class RegistryProductPanel extends Panel {
 		limit.setRequired(true);
 		limit.add(StringValidator.maximumLength(50));
 		limit.add(StringValidator.minimumLength(2));
-		limit.add(new PatternValidator("[а-я0-9/ ]+"));
+		limit.add(new PatternValidator("[0-9]+ [а-я]+/[а-я]+"));
+		limit.add(new CoverTooltipBehavior(descLimit, null));
 		form.add(limit);
 
 		TextField<String> nameProduct = new TextField<String>("nameProduct");
 		nameProduct.setRequired(true);
 		nameProduct.add(StringValidator.maximumLength(90));
 		nameProduct.add(StringValidator.minimumLength(2));
+		nameProduct.add(new CoverTooltipBehavior(descName, null));
 		form.add(nameProduct);
 
 		TextField<BigDecimal> priceProd = new TextField<BigDecimal>("priceProduct");
 		priceProd.setRequired(true);
 		priceProd.add(RangeValidator.<BigDecimal> range(new BigDecimal(0), new BigDecimal(1_000_000_000_000_000.00)));
+		priceProd.add(new CoverTooltipBehavior(descPrice, null));
 		form.add(priceProd);
 
 		RadioChoice<Boolean> choice = new RadioChoice<>("status", STATUS);
 		choice.setRequired(true);
+		choice.add(new CoverTooltipBehavior(descStatus, null));
 		form.add(choice);
 
 		form.add(new Button("sendButton") {
 			@Override
 			public void onSubmit() {
-				for (String name : inTypes) {
-					product.setTypes(listType.get(namesType.indexOf(name.substring(name.lastIndexOf("-") + 1))));
+				product.getTypes().clear();
 
-					Type type = listType.get(namesType.indexOf(name.substring(name.lastIndexOf("-") + 1)));
+				for (String name : inTypes) {
+					product.setTypes(listType.get(namesType.indexOf(name)));
+
+					Type type = listType.get(namesType.indexOf(name));
 					if (type.getParentType() != null) {
 						while (true) {
 							type = type.getParentType();
@@ -107,13 +140,14 @@ public class RegistryProductPanel extends Panel {
 					}
 				}
 				if (product.getId() == null) {
+					product.setIdUser(AuthorizedSession.get().getUser());
 					productService.register(product);
 				} else {
 					productService.update(product);
 				}
 				setResponsePage(new ProductPage());
 			}
-		});
+		}.add(new CoverTooltipBehavior(saveProd, null)));
 
 		for (int i = 0; i < listType.size(); i++) {
 			Type t = listType.get(i);
@@ -121,158 +155,57 @@ public class RegistryProductPanel extends Panel {
 			namesType.add(i, nt);
 		}
 
-		List<String> listParentsName = new ArrayList<>();
-		List<Type> listTypeCopy = new ArrayList<>(listType);
-		while (!listTypeCopy.isEmpty()) {
-			for (int i = 0; i < listTypeCopy.size(); i++) {
-				Type t = listTypeCopy.get(i);
-				Type tPar = t.getParentType();
-				String nt = t.getTypeName();
-				String pn = "";
-				int counter = 0;
-				if (tPar != null) {
-					pn = tPar.getTypeName();
-					if (tPar.getParentType() != null) {
-						while (true) {
-							tPar = tPar.getParentType();
-
-							if (tPar != null) {
-								pn = "-" + pn;
-								counter++;
-							}
-
-							if (tPar == null) {
-								tPar = t.getParentType();
-								break;
-							}
-						}
-					}
-				}
-				if (tPar != null && listParentsName.contains(pn)) {
-					for (int k = 0; k < (counter + 1); k++) {
-						nt = "-" + nt;
-					}
-					int indexP = listParentsName.indexOf(pn);
-					listParentsName.add(indexP + 1, nt);
-					listTypeCopy.remove(t);
-				}
-
-				if (tPar == null) {
-					listParentsName.add(nt);
-					listTypeCopy.remove(t);
-				}
-			}
-		}
-
-		ListMultipleChoice<String> choiceType = new ListMultipleChoice<String>("listType",
-				new Model<ArrayList<String>>(inTypes), listParentsName);
-		choiceType.setMaxRows(10);
-		if (product.getId() == null) {
-			choiceType.setRequired(true);
-		}
-		form.add(choiceType);
-
-		List<Type> existTypesProd = product.getTypes();
-		List<String> existNameTypesProd = new ArrayList<String>();
 		if (!existTypesProd.isEmpty()) {
 			for (Type t : existTypesProd) {
 				existNameTypesProd.add(t.getTypeName());
 			}
+			inTypes.addAll(existNameTypesProd);
 		}
-		ListView<String> showsExistType = new ListView<String>("existType", existNameTypesProd) {
 
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void populateItem(ListItem item) {
-				item.add(new Label("existTypes", item.getModel()));
-				item.add(new Link<Object>("deleteType", item.getModel()) {
-					
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						String selected = (String) getModelObject();
-						/*
-						 * Попробовать удалять в цикле НЕ сразу с продукта, а со списка(listTypes) те которые удалять не надо из продукта. А потом сразу сделать removeAll(оставшиеся в listTypes)
-						 */
-//						List<Type> listTypes = product.getTypes();
-//						for (Type t : listTypes) {
-//							Type tt = t.getParentType();
-//							if (tt != null) {
-//								while (true) {
-//									if (tt != null && tt.getTypeName().equals(selected)) {
-//										product.getTypes().remove(t);
-//										break;
-//									}
-//									if (tt == null) {
-//										break;
-//									}
-//									tt = tt.getParentType();
-//								}
-//							}
-//						}
-						product.getTypes().remove(existNameTypesProd.indexOf(selected));
-						setResponsePage(new ProductRegPage(product));
-					}
-				});
-			}
-		};
-		form.add(showsExistType);
-
-		form.add(new SubmitLink("saveType") {
-			@Override
-			public void onSubmit() {
-				super.onSubmit();
-				for (String s : inTypes) {
-					if (!inAddTypes.contains(s)) {
-						inAddTypes.add(s.substring(s.lastIndexOf("-") + 1));
-
-						Type type = listType.get(namesType.indexOf(s.substring(s.lastIndexOf("-") + 1)));
-						if (type.getParentType() != null) {
-							while (true) {
-								type = type.getParentType();
-								String nm = namesType.get(listType.indexOf(type));
-								if (!inAddTypes.contains(nm)) {
-									inAddTypes.add(nm);
-								} else {
-									break;
-								}
-
-								if (type.getParentType() == null) {
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-		});
-
-		ListView<String> addTypes = new ListView("addTypes", inAddTypes) {
-			@Override
-			protected void populateItem(ListItem item) {
-				item.add(new Label("addType", item.getModel()));
-				item.add(new Link("dellType", item.getModel()) {
-					@Override
-					public void onClick() {
-						String selected = (String) getModelObject();
-						inTypes.remove(selected);
-					}
-				});
-			}
-		};
-
-		form.add(addTypes);
-
+		final Palette<String> palette = new Palette<>("palleteType", Model.ofList(inTypes),
+				new CollectionModel<String>(namesType), new ProductChoiceRenderer(namesType), 15, false, true);
+		palette.add(new DefaultTheme());
+		form.add(palette);
 		add(form);
 
-		add(new Link("BackToProducts") {
+		form.add(new Link<ProductPage>("BackToProducts") {
 			@Override
 			public void onClick() {
 				setResponsePage(new ProductPage());
 			}
-		});
+		}.add(new CoverTooltipBehavior(descLink, null)));
+
+	}
+
+	private static Options newOptions() {
+		Options options = new Options();
+		options.set("track", true);
+		options.set("hide", "{ effect: 'drop', delay: 100 }");
+
+		return options;
+	}
+
+	class CoverTooltipBehavior extends CustomTooltipBehavior {
+		private static final long serialVersionUID = 1L;
+
+		private final String name;
+		private final String url;
+
+		public CoverTooltipBehavior(String name, String url) {
+			super(newOptions());
+
+			this.name = name;
+			this.url = url;
+		}
+
+		@Override
+		protected WebMarkupContainer newContent(String markupId) {
+			Fragment fragment = new Fragment(markupId, "tooltip-fragment", RegistryProductPanel.this);
+			fragment.add(new Label("name", Model.of(this.name)));
+			// fragment.add(new ContextImage("cover", Model.of(this.url)));
+
+			return fragment;
+		}
 
 	}
 

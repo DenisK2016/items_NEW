@@ -1,0 +1,24 @@
+<wicket:panel>
+	<table rules="cols" class="menu_size" width="70%">
+		<tr>
+			<th class="menu_fcollor" wicket:id="linkproduct">Products</th>
+			<th class="menu_collor" wicket:id="types">Types</th>
+			<th class="menu_collor" wicket:id="user">Users</th>
+			<th class="menu_collor" wicket:id="packages">Packages</th>
+			<th class="menu_collor" wicket:id="recipient">Recipients</th>
+			<th class="menu_collor"
+				onMouseOut="getElementById('menu1').style.display='none';"
+				onMouseOver="getElementById('menu1').style.display='block';">Profile</th>
+		</tr>
+	</table>
+	<table id="menu1" class="submenu_admin"
+		onMouseOut="this.style.display='none';"
+		onMouseOver="this.style.display='block';">
+		<tr>
+			<td class="submenu_collor" wicket:id="profile">Profile menu</td>
+		</tr>
+		<tr>
+			<td class="submenu_collor" wicket:id="logout">Logout</td>
+		</tr>
+	</table>
+</wicket:panel>

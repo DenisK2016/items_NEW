@@ -4,49 +4,53 @@
 			<td><a wicket:id="BackToPackages">Back</a>
 				<h2>Регистрация нового пакета</h2> <br>
 				<form wicket:id="formRegPack">
-				<span wicket:id="feedback"></span>
-				<input type="text" wicket:id="id" />Введите трекинг-код:<br>
-				Выберите получчателя по Id:<br>
-				<select	wicket:id="idRecipient"></select><br>
-				<input type="text" wicket:id="price" />Цена растаможки:<br>
-				<input type="text" wicket:id="weight" />Вес всей посылки:<br>
+					<span wicket:id="feedback"></span> <input type="text"
+						wicket:id="id" />Введите трекинг-код(В будушем код изменить нельзя):<br> Выберите
+					получчателя по Id:<br> <select wicket:id="idRecipient"></select><br>
+					<input type="text" wicket:id="price" />Цена растаможки:<br> <input
+						type="text" wicket:id="weight" />Вес всей посылки:<br>
+					<wicket:enclosure child="idUser">
 				Выберите инспектора посылки:<br>
-				<select	wicket:id="idUser"></select><br>
-				<input type="text" wicket:id="date" />Дата прихода:<br>
-				<input type="text" wicket:id="description" />Описание посылки:<br>
-				<input type="text" wicket:id="countrySender" />Страна отправитель:<br>
-				<input type="text" wicket:id="paymentDeadline" />Срок оплаты(пока в днях):<br>
-				<input type="text" wicket:id="fine" />Штраф:<br>
-				<span wicket:id="paid"></span><br>
-				
-				
-			    <input type="submit" wicket:id="savePack" value="Сохранить" />
+						<select wicket:id="idUser"></select>
+						<br>
+					</wicket:enclosure>
+					<input type="text" wicket:id="date" />Дата прихода:<br> <input
+						type="text" wicket:id="description" />Описание посылки:<br>
+					<input type="text" wicket:id="countrySender" />Страна отправитель:<br>
+					<input type="text" wicket:id="paymentDeadline" />Срок оплаты(пока
+					в днях):<br> <input type="text" wicket:id="fine" />Штраф:<br>
+					<span wicket:id="paid"></span><br> <input type="submit"
+						wicket:id="savePack" value="Сохранить" />
 				</form></td>
 		</tr>
-		
+
 		<tr>
-		<td>
-		<form wicket:id="formProd">
-		<select	wicket:id="choiceProduct"></select>
-		<button type="submit" wicket:id="selectProduct">Добавить продукт</button>
-		<!-- <input wicket:id="spinner" type="text"></input> --><br>
-				<table>
-				<tr>
-				<th>Продукты в пакете</th>
-				</tr>
-				<tr wicket:id="addsProd">
-				<td><span wicket:id="addProd">products</span></td>
-				<td><a wicket:id="deleteProd">Удалить</a></td>
-				</tr>
-				<tr wicket:id="existsProd">
-				<td><b><span wicket:id="existProd">products</span></b></td>
-				<td><a wicket:id="delExistProd">Удалить</a></td>
-				</tr>
-				</table>
+			<td>
+				<form wicket:id="formProd">
+					<select wicket:id="choiceProduct"></select>
+					<button type="submit" wicket:id="selectProduct">Добавить
+						продукт</button>
+					<input wicket:id="spinner" type="text"></input><br>
+					<table>
+						<tr>
+							<th>Продукты в пакете</th>
+						</tr>
+						<tr wicket:id="addsProd">
+							<td><span wicket:id="addProd">products</span></td>
+							<td><a wicket:id="deleteProd">Удалить</a></td>
+						</tr>
+						<tr wicket:id="existsProd">
+							<td><b><span wicket:id="existProd">products</span></b></td>
+							<td><a wicket:id="delExistProd">Удалить</a></td>
+						</tr>
+					</table>
 				</form>
-		</td>
+			</td>
 		</tr>
 	</table>
+	<wicket:fragment wicket:id="tooltip-fragment">
+		<span wicket:id="name" class="fragment">[description]</span>
+	</wicket:fragment>
 </wicket:panel>
 
 

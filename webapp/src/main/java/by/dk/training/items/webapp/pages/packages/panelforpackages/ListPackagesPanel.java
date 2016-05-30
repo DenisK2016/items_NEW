@@ -6,7 +6,13 @@ import java.util.Iterator;
 import javax.inject.Inject;
 import javax.persistence.metamodel.SingularAttribute;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.WindowClosedCallback;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
@@ -27,6 +33,7 @@ import by.dk.training.items.services.PackageService;
 import by.dk.training.items.webapp.pages.packages.PackagesPage;
 import by.dk.training.items.webapp.pages.packages.formforreg.PackRegPage;
 
+@AuthorizeAction(roles = { "ADMIN", "COMMANDER" }, action = Action.RENDER)
 public class ListPackagesPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
@@ -35,6 +42,24 @@ public class ListPackagesPanel extends Panel {
 
 	public ListPackagesPanel(String id) {
 		super(id);
+
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		final ModalWindow modal1 = new ModalWindow("modal1");
+		modal1.setTitle("Информация о получателе");
+		modal1.setWindowClosedCallback(new WindowClosedCallback() {
+
+			@Override
+			public void onClose(AjaxRequestTarget target) {
+				target.add(ListPackagesPanel.this);
+
+			}
+		});
+		this.setOutputMarkupId(true);
+		add(modal1);
 		SortablePackageProvider dataProvider = new SortablePackageProvider();
 		DataView<Package> dataView = new DataView<Package>("packagelist", dataProvider, 5) {
 
@@ -44,6 +69,13 @@ public class ListPackagesPanel extends Panel {
 			protected void populateItem(Item<Package> item) {
 				Package pack = item.getModelObject();
 
+				item.add(new AjaxLink<Void>("infoPackage") {
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						modal1.setContent(new PackageInfo(modal1, pack));
+						modal1.show(target);
+					}
+				});
 				item.add(new Label("packageid", pack.getId()));
 				item.add(new Label("recipientid", pack.getIdRecipient().getId()));
 				item.add(new Label("price", pack.getPrice()));
@@ -55,6 +87,7 @@ public class ListPackagesPanel extends Panel {
 				item.add(new Label("deadline", pack.getPaymentDeadline()));
 				item.add(new Label("fine", pack.getFine()));
 				item.add(new CheckBox("paid", Model.of(pack.getPaid())));
+
 				item.add(new Link("deletelink", item.getModel()) {
 
 					@Override
@@ -69,7 +102,7 @@ public class ListPackagesPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						setResponsePage(new PackRegPage(pack));						
+						setResponsePage(new PackRegPage(pack));
 					}
 				});
 
