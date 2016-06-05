@@ -2,6 +2,7 @@ package by.dk.training.items.datamodel;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "package")
-public class Package implements Serializable{
+public class Package implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,13 +33,13 @@ public class Package implements Serializable{
 	private Recipient idRecipient;
 
 	@Column(nullable = false)
-	private BigDecimal price;
+	private BigDecimal price = new BigDecimal("0");
 
 	@Column(nullable = false)
-	private Double weight;
+	private Double weight = 0.0;
 
 	@ManyToOne(targetEntity = UserProfile.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_user", nullable = false)
+	@JoinColumn(name = "id_user")
 	private UserProfile idUser;
 
 	@Column(nullable = false)
@@ -60,10 +61,32 @@ public class Package implements Serializable{
 	@Column(nullable = false)
 	private Boolean paid;
 
+	@Column(nullable = false)
+	private BigDecimal tax = new BigDecimal("0");
+
 	@JoinTable(name = "package_2_product", joinColumns = { @JoinColumn(name = "package_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "product_id") })
 	@ManyToMany(targetEntity = Product.class, fetch = FetchType.LAZY)
-	private List<Product> products;
+	private List<Product> products = new ArrayList<>();
+
+	@Column(name = "percent_fine")
+	private BigDecimal percentFine;
+
+	public BigDecimal getPercentFine() {
+		return percentFine;
+	}
+
+	public void setPercentFine(BigDecimal percentFine) {
+		this.percentFine = percentFine;
+	}
+
+	public BigDecimal getTax() {
+		return tax;
+	}
+
+	public void setTax(BigDecimal tax) {
+		this.tax = tax;
+	}
 
 	public Boolean getPaid() {
 		return paid;
@@ -157,8 +180,8 @@ public class Package implements Serializable{
 		return products;
 	}
 
-	public void setProducts(List<Product> products) {
-		this.products = products;
+	public void setProducts(Product products) {
+		this.products.add(products);
 	}
 
 	@Override

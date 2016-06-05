@@ -1,21 +1,36 @@
 <wicket:panel>
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen"
+		title="Stylesheet" />
+
 	<table class="regprod">
 		<tr>
+			<p class="wcaptionText">Регистрация нового пользователя</p>
+		</tr>
+		<tr>
 			<td>
-				<form wicket:id="formRegUser">
-					<span wicket:id="feedback" /> <input type="text" wicket:id="login" />Логин<br>
-					<input type="text" wicket:id="password" />Пароль<br> <input
-						type="text" wicket:id="firstName" />Имя<br> <input
-						type="text" wicket:id="lastName" />Фамилия<br> <input
-						type="text" wicket:id="email" />email<br> <input type="text"
-						wicket:id="post" />Занимаемая должность<br> <select
-						wicket:id="rank"></select>Звание<br> <input type="submit"
+				<form wicket:id="formRegUser" class="form_modal_window">
+					<label for="login">Логин: </label><input class="field"
+						style="margin-left: 35%;" id="login" type="text" wicket:id="login" /><br>
+					<br> <label for="pass">Пароль: </label><input class="field"
+						style="margin-left: 31.6%;" id="pass" type="text"
+						wicket:id="password" /><br> <br> <label for="namee">Имя:
+					</label><input class="field" style="margin-left: 38%;" id="namee"
+						type="text" wicket:id="firstName" /><br> <br> <label
+						for="lnamee">Фамилия: </label><input class="field"
+						style="margin-left: 28.5%;" id="lnamee" type="text"
+						wicket:id="lastName" /><br> <br> <label for="emaill">email:
+					</label><input class="field" style="margin-left: 36.2%;" id="email"
+						type="text" wicket:id="email" /><br> <br> <label
+						for="postt">Занимаемая должность: </label><input class="field"
+						style="margin-left: 0%;" id="postt" type="text" wicket:id="post" /><br>
+					<br> Звание<br> <select class="field"
+						style="width: 170px" wicket:id="rank"></select><br> <br>
+					<br> <br> <input class="field" type="submit"
 						wicket:id="save" value="Сохранить" /> <a wicket:id="cancel">Отменить</a>
+					<span wicket:id="feedback" />
 				</form>
 			</td>
 		</tr>
 	</table>
-	<wicket:fragment wicket:id="tooltip-fragment">
-		<span wicket:id="name" class="fragment">[description]</span>
-	</wicket:fragment>
+	<div wicket:id="modal2"></div>
 </wicket:panel>

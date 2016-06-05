@@ -7,29 +7,27 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.markup.html.form.palette.Palette;
 import org.apache.wicket.extensions.markup.html.form.palette.theme.DefaultTheme;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.CollectionModel;
-import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.apache.wicket.validation.validator.StringValidator;
-
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.tooltip.CustomTooltipBehavior;
 
 import by.dk.training.items.dataaccess.filters.ProductFilter;
 import by.dk.training.items.datamodel.Product;
@@ -50,39 +48,32 @@ public class RegistryProductPanel extends Panel {
 	private TypeService typeService;
 	private ProductFilter productFilter;
 	private Product product;
-	private static final List<Boolean> STATUS = Arrays.asList(new Boolean[] { true, false });
+	private static final List<String> STATUS = Arrays.asList(new String[] { "Да", "Нет" });
 	private List<Type> listType = typeService.getAll();
 	private List<String> namesType = new ArrayList<>();
 	private ArrayList<String> inTypes = new ArrayList<>();
 	private List<String> inAddTypes = new ArrayList<>();
+	private String stat;
 
 	List<Type> existTypesProd;
 	List<String> existNameTypesProd = new ArrayList<String>();
+	private ModalWindow modalWindow;
 
-	private ProductRegPage page;
-	private String descLimit = "Здесь вводится какое количество продуктов в год можно ввести в страну и еденицы измерения.";
-	private String descName = "Здесь вводится конкретное название(марка) продукта. Например \"Lenovo Z510\"";
-	private String descPrice = "Цена растаможки за каждую еденицу продукта, при привышении указанного лимита ввоза.";
-	private String descStatus = "Статус продукта определяет разрешение на ввоз в страну.";
-	private String descTypes = "Типы продукта. Типов может быть несколько.Паррент типы добавляются автоматически.";
-	private String descDellType = "Удалить добавленный тип";
-	private String descDellExType = "Удалить существующий тип";
-	private String saveProd = "Сохранить продукт";
-	private String addType = "Добавить тип";
-	private String descLink = "На страницу с продуктами.";
-
-	public RegistryProductPanel(String id, ProductRegPage page) {
-		super(id);
+	public RegistryProductPanel(ModalWindow modalWindow) {
+		super(modalWindow.getContentId());
+		this.modalWindow = modalWindow;
+		this.modalWindow.setInitialHeight(700);
 		product = new Product();
 		existTypesProd = new ArrayList<>();
-		this.page = page;
 	}
 
-	public RegistryProductPanel(String id, Product product, ProductRegPage page) {
-		super(id);
+	public RegistryProductPanel(ModalWindow modalWindow, Product product) {
+		super(modalWindow.getContentId());
+		this.modalWindow = modalWindow;
+		this.modalWindow.setInitialHeight(700);
 		this.product = product;
 		existTypesProd = this.product.getTypes();
-		this.page = page;
+
 	}
 
 	@Override
@@ -91,36 +82,40 @@ public class RegistryProductPanel extends Panel {
 		Form<?> form = new Form<>("formreg", new CompoundPropertyModel<Product>(product));
 		form.add(new FeedbackPanel("feedback"));
 
-		TextField<String> limit = new TextField<String>("limit");
-		limit.setRequired(true);
-		limit.add(StringValidator.maximumLength(50));
-		limit.add(StringValidator.minimumLength(2));
-		limit.add(new PatternValidator("[0-9]+ [а-я]+/[а-я]+"));
-		limit.add(new CoverTooltipBehavior(descLimit, null));
-		form.add(limit);
+		TextField<Double> weightProd = new TextField<Double>("weight");
+		weightProd.setRequired(true);
+		weightProd.add(RangeValidator.<Double> range(new Double(0), Double.MAX_VALUE));
+		form.add(weightProd);
 
 		TextField<String> nameProduct = new TextField<String>("nameProduct");
 		nameProduct.setRequired(true);
 		nameProduct.add(StringValidator.maximumLength(90));
 		nameProduct.add(StringValidator.minimumLength(2));
-		nameProduct.add(new CoverTooltipBehavior(descName, null));
 		form.add(nameProduct);
 
 		TextField<BigDecimal> priceProd = new TextField<BigDecimal>("priceProduct");
 		priceProd.setRequired(true);
 		priceProd.add(RangeValidator.<BigDecimal> range(new BigDecimal(0), new BigDecimal(1_000_000_000_000_000.00)));
-		priceProd.add(new CoverTooltipBehavior(descPrice, null));
 		form.add(priceProd);
 
-		RadioChoice<Boolean> choice = new RadioChoice<>("status", STATUS);
+		RadioChoice<String> choice = new RadioChoice<>("status", new PropertyModel<String>(this, "stat"), STATUS);
+		choice.add(new AjaxFormComponentUpdatingBehavior("change") {
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+			}
+		});
 		choice.setRequired(true);
-		choice.add(new CoverTooltipBehavior(descStatus, null));
 		form.add(choice);
 
 		form.add(new Button("sendButton") {
 			@Override
 			public void onSubmit() {
 				product.getTypes().clear();
+				if (stat.equals("Да")) {
+					product.setStatus(true);
+				} else {
+					product.setStatus(false);
+				}
 
 				for (String name : inTypes) {
 					product.setTypes(listType.get(namesType.indexOf(name)));
@@ -147,7 +142,7 @@ public class RegistryProductPanel extends Panel {
 				}
 				setResponsePage(new ProductPage());
 			}
-		}.add(new CoverTooltipBehavior(saveProd, null)));
+		});
 
 		for (int i = 0; i < listType.size(); i++) {
 			Type t = listType.get(i);
@@ -168,43 +163,17 @@ public class RegistryProductPanel extends Panel {
 		form.add(palette);
 		add(form);
 
-		form.add(new Link<ProductPage>("BackToProducts") {
+		form.add(new AjaxLink<Void>("BackToProducts") {
 			@Override
-			public void onClick() {
-				setResponsePage(new ProductPage());
+			public void onClick(AjaxRequestTarget target) {
+				modalWindow.close(target);
 			}
-		}.add(new CoverTooltipBehavior(descLink, null)));
+		});
 
-	}
-
-	private static Options newOptions() {
-		Options options = new Options();
-		options.set("track", true);
-		options.set("hide", "{ effect: 'drop', delay: 100 }");
-
-		return options;
-	}
-
-	class CoverTooltipBehavior extends CustomTooltipBehavior {
-		private static final long serialVersionUID = 1L;
-
-		private final String name;
-		private final String url;
-
-		public CoverTooltipBehavior(String name, String url) {
-			super(newOptions());
-
-			this.name = name;
-			this.url = url;
-		}
-
-		@Override
-		protected WebMarkupContainer newContent(String markupId) {
-			Fragment fragment = new Fragment(markupId, "tooltip-fragment", RegistryProductPanel.this);
-			fragment.add(new Label("name", Model.of(this.name)));
-			// fragment.add(new ContextImage("cover", Model.of(this.url)));
-
-			return fragment;
+		if (product.getId() == null) {
+			form.add(new Label("regOrUpdate", "Регистрация нового продукта."));
+		} else {
+			form.add(new Label("regOrUpdate", "Изменение продукта."));
 		}
 
 	}

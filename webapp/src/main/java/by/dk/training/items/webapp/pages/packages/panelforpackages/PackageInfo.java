@@ -9,6 +9,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -47,13 +48,19 @@ public class PackageInfo extends Panel {
 		add(new Label("idRec", pack.getIdRecipient().getId()));
 		add(new Label("price", pack.getPrice()));
 		add(new Label("weight", pack.getWeight()));
+		add(new Label("tax", pack.getTax()));
 		add(new Label("idUser", pack.getIdUser().getId()));
 		add(DateLabel.forDatePattern("date", Model.of(pack.getDate()), "dd-MM-yyyy"));
-		add(new Label("descr", pack.getDescription()));
+		if (pack.getDescription() != null) {
+			add(new Label("descr", pack.getDescription()));
+		} else {
+			add(new Label("descr", "-"));
+		}
+
 		add(new Label("country", pack.getCountrySender()));
 		add(new Label("payment", pack.getPaymentDeadline()));
 		add(new Label("fine", pack.getFine()));
-		add(new Label("paid", pack.getPaid()));
+		add(new CheckBox("paid", Model.of(pack.getPaid())).setEnabled(false));
 
 		List<String> listProduct = new ArrayList<>();
 		for (Product p : pack.getProducts()) {

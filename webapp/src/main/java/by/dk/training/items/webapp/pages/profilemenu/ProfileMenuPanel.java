@@ -25,7 +25,7 @@ import by.dk.training.items.datamodel.Package;
 import by.dk.training.items.datamodel.UserProfile;
 import by.dk.training.items.services.UserProfileService;
 import by.dk.training.items.webapp.pages.home.HomePage;
-import by.dk.training.items.webapp.pages.profilemenu.modalwindows.EditPasswordPanel;
+import by.dk.training.items.webapp.pages.profilemenu.modalwindows.EditInfoPanel;
 
 @AuthorizeAction(roles = { "ADMIN", "COMMANDER", "OFFICER" }, action = Action.RENDER)
 public class ProfileMenuPanel extends Panel {
@@ -81,13 +81,24 @@ public class ProfileMenuPanel extends Panel {
 
 		final ModalWindow modal1;
 		add(modal1 = new ModalWindow("modal1"));
-		modal1.setTitle("Редактирование данных");
+		modal1.setCssClassName("modal_window");
+		modal1.setInitialHeight(300);
+		modal1.setResizable(false);
+		modal1.setWindowClosedCallback(new WindowClosedCallback() {
+
+			@Override
+			public void onClose(AjaxRequestTarget target) {
+				target.add(ProfileMenuPanel.this);
+
+			}
+		});
+		this.setOutputMarkupId(true);
 
 		this.setOutputMarkupId(true);
 		add(new AjaxLink<Void>("setPassword") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				modal1.setContent(new EditPasswordPanel(modal1, userProfile, "password"));
+				modal1.setContent(new EditInfoPanel(modal1, userProfile, "password"));
 				modal1.show(target);
 			}
 		});
@@ -95,28 +106,28 @@ public class ProfileMenuPanel extends Panel {
 		add(new AjaxLink<Void>("setFirstName") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				modal1.setContent(new EditPasswordPanel(modal1, userProfile, "firstName"));
+				modal1.setContent(new EditInfoPanel(modal1, userProfile, "firstName"));
 				modal1.show(target);
 			}
 		});
 		add(new AjaxLink<Void>("setLastName") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				modal1.setContent(new EditPasswordPanel(modal1, userProfile, "lastName"));
+				modal1.setContent(new EditInfoPanel(modal1, userProfile, "lastName"));
 				modal1.show(target);
 			}
 		});
 		add(new AjaxLink<Void>("setPost") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				modal1.setContent(new EditPasswordPanel(modal1, userProfile, "post"));
+				modal1.setContent(new EditInfoPanel(modal1, userProfile, "post"));
 				modal1.show(target);
 			}
 		});
 		add(new AjaxLink<Void>("setRank") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				modal1.setContent(new EditPasswordPanel(modal1, userProfile, "ranks"));
+				modal1.setContent(new EditInfoPanel(modal1, userProfile, "ranks"));
 				modal1.show(target);
 			}
 		});

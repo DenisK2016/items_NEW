@@ -1,36 +1,72 @@
 <wicket:panel>
-	<table cellspacing="0" class="dataview">
-		<tr>
-			<th></th>
-			<th wicket:id="orderById">ID</th>
-			<th wicket:id="orderByRec">Recipient</th>
-			<th wicket:id="orderByPrice">Price</th>
-			<th wicket:id="orderByWeight">Weight</th>
-			<th wicket:id="orderByUser">User</th>
-			<th wicket:id="orderByDate">Date</th>
-			<th wicket:id="orderByDesc">Description</th>
-			<th wicket:id="orderBySend">Country sender</th>
-			<th wicket:id="orderByDead">Payment deadline</th>
-			<th wicket:id="orderByFine">Fine</th>
-			<th wicket:id="orderByPaid">Paid</th>
-		</tr>
-		<tr wicket:id="packagelist">
-			<td><a wicket:id="infoPackage">Выбрать</a></td>
-			<td><span wicket:id="packageid">[packageid]</span></td>
-			<td><span wicket:id="recipientid">[recipientid]</span></td>
-			<td><span wicket:id="price">[price]</span></td>
-			<td><span wicket:id="weight">[weight]</span></td>
-			<td><span wicket:id="userid">[userid]</span></td>
-			<td><span wicket:id="date">[date]</span></td>
-			<td><span wicket:id="description">[description]</span></td>
-			<td><span wicket:id="countrysender">[countrysender]</span></td>
-			<td><span wicket:id="deadline">[deadline]</span></td>
-			<td><span wicket:id="fine">[fine]</span></td>
-			<td><input type="checkbox" wicket:id="paid"></input></td>
-			<td><a wicket:id="deletelink">Удалить</a><a
-				wicket:id="updatePack">Изменить</a></td>
-		</tr>
-	</table>
-	<span wicket:id="navigator">[dataview navigator]</span>
+	<div wicket:id="wmc">
+		<table cellspacing="0" class="dataview-packages">
+			<tr>
+				<td align="center">Найти</td>
+				<td align="center"><input class="field-package" type="text"
+					wicket:id="userFilter" placeholder="По id польз." /><br> <input
+					class="field-package" type="text" wicket:id="idFilter"
+					placeholder="По трек.коду" /></td>
+				<td style="width: 125px;" align="center"><input
+					class="field-package" type="text" wicket:id="startDateFilter"
+					placeholder="Нач. дата" style="width: 75px;" /><br> <input
+					class="field-package" type="text" wicket:id="endDateFilter"
+					placeholder="Кон. дата" style="width: 75px;" /></td>
+				<td align="center"><input class="field-package" type="text"
+					wicket:id="descFilter" placeholder="По описанию" /><br> <input
+					class="field-package" type="text" wicket:id="priceFilter"
+					placeholder="По цене" /></td>
+				<td align="center"><input class="field-package" type="text"
+					wicket:id="countryFilter" placeholder="По стране" /><br> <input
+					class="field-package" type="text" wicket:id="weightFilter"
+					placeholder="По весу" /></td>
+				<td align="center"><input class="field-package" type="text"
+					wicket:id="taxFilter" placeholder="По налогу" /><br> <input
+					class="field-package" type="text" wicket:id="recipientFilter"
+					placeholder="По получателю" /></td>
+				<td class="field-package" colspan="3" align="left"
+					style="font-size: 9pt;"><input type="checkbox"
+					wicket:id="paidFilter" />Все оплаченные<br> <input
+					type="checkbox" wicket:id="fineFilter" />Все штрафные<br> <input
+					type="checkbox" wicket:id="notPaidFilter" />Не штрафные и не
+					оплач.<br> <input type="checkbox" wicket:id="myPackFilter" />Вернуть
+					посылки пользователя<br></td>
+			</tr>
+			<tr>
+				<th></th>
+				<th wicket:id="orderById">Трекинг код</th>
+				<th wicket:id="orderByPrice">Стоимость<br>(рубли)
+				</th>
+				<th wicket:id="orderByWeight">Вес(кг)</th>
+				<th wicket:id="orderByTax">Налог<br>(рубли)
+				</th>
+				<th wicket:id="orderByDead">До конца оплаты<br>(дни)
+				</th>
+				<th wicket:id="orderByFine">Штраф<br>(рубли)
+				</th>
+				<th wicket:id="orderByPaid">Статус оплаты</th>
+			</tr>
+			<tbody>
+				<tr wicket:id="packagelist">
+					<td><a class="icon_select" wicket:id="infoPackage">&#10148;</a></td>
+					<td align="center"><span wicket:id="packageid">[packageid]</span></td>
+					<td align="center"><span wicket:id="price">[price]</span></td>
+					<td align="center"><span wicket:id="weight">[weight]</span></td>
+					<td align="center"><span wicket:id="tax">[tax]</span></td>
+					<td align="center"><span wicket:id="deadline">[deadline]</span></td>
+					<td align="center"><span wicket:id="fine">[fine]</span></td>
+					<td align="center"><div class="squaredOne">
+							<input wicket:id="paid" type="checkbox"></input><label
+								for="squared"></label>
+						</div></td>
+					<td align="center"><a wicket:id="deletelink"
+						class="icon_delete">&#10007;</a></td>
+					<td align="center"><a wicket:id="updatePack" class="icon-edit">&#9997;</a></td>
+				</tr>
+			</tbody>
+
+		</table>
+		<span wicket:id="navigator">[dataview navigator]</span>
+	</div>
 	<div wicket:id="modal1"></div>
 </wicket:panel>

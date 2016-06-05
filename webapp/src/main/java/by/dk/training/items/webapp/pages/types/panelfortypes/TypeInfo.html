@@ -1,5 +1,10 @@
 <wicket:panel>
-	<table>
+<link rel="stylesheet" href="style.css" type="text/css" media="screen"
+		title="Stylesheet" />
+	<table class="regprod">
+		<tr>
+			<th colspan="2" align="center">Информация о типе</th>
+		</tr>
 		<tr>
 			<td>Номер типа:</td>
 			<td wicket:id="typeid"></td>
@@ -9,7 +14,7 @@
 			<td wicket:id="typename"></td>
 		</tr>
 		<tr>
-			<td>Тип, к которому относится данный тип:</td>
+			<td>Тип, к которому относится<br> данный тип:</td>
 			<td wicket:id="parenttype"></td>
 		</tr>
 		<tr>
@@ -20,6 +25,6 @@
 
 
 
-	<a wicket:id="back">Back</a>
+	<a wicket:id="back">Назад</a>
 
 </wicket:panel>

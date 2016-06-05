@@ -1,5 +1,6 @@
 package by.dk.training.items.services;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -29,7 +30,11 @@ public interface UserProfileService {
 	List<UserProfile> find(UserFilter userFilter);
 
 	List<UserProfile> getAll();
-	
+
 	Long count(UserFilter filter);
+
+	UserProfile getByNameAndPassword(String login, String password);
+	
+	Collection<? extends String> resolveRoles(Long id);
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
@@ -45,15 +46,23 @@ public class ProductInfo extends Panel {
 		add(new Label("productid", product.getId()));
 		add(new Label("productname", product.getNameProduct()));
 		add(new Label("productprice", product.getPriceProduct()));
-		add(new Label("productlimit", product.getLimit()));
-		add(new CheckBox("productstatus", Model.of(product.getStatus())).setEnabled(false));
+		add(new Label("productlimit", product.getWeight()));
+		CheckBox chk = new CheckBox("productstatus", Model.of(product.getStatus()));
+		chk.setEnabled(false);
+		if (product.getStatus()) {
+			chk.add(AttributeModifier.append("title", "Ввоз разрешен"));
+		} else {
+			chk.add(AttributeModifier.append("title", "Ввоз запрещен"));
+		}
+		add(chk);
 		add(new Label("user", String.format("%d %s", product.getIdUser().getId(), product.getIdUser().getLogin())));
 
 		List<String> listTypes = new ArrayList<>();
 		for (Type t : product.getTypes()) {
 			listTypes.add(String.format("%d %s", t.getId(), t.getTypeName()));
 		}
-		add(new DropDownChoice<>("types", listTypes).setNullValid(true));
+		add(new DropDownChoice<>("types", listTypes).setNullValid(true)
+				.add(AttributeModifier.append("title", "Типы к которым относится данный продукт")));
 
 		add(new AjaxLink<Void>("back") {
 
@@ -61,7 +70,7 @@ public class ProductInfo extends Panel {
 			public void onClick(AjaxRequestTarget target) {
 				modalWindow.close(target);
 			}
-		});
+		}.add(AttributeModifier.append("title", "Назад")));
 	}
 
 }

@@ -1,19 +1,27 @@
 <wicket:panel>
-	<table class="regprod">
-		<tr>
-			<td><a wicket:id="BackToTypes">Back</a>
-				<h2>Регистрация нового типа продукта</h2> <br>
-				<form wicket:id="formregType">
-					<span wicket:id="feedback" /> <input type="text"
-						wicket:id="typeName" />Имя типа<br> <select
-						wicket:id="ParentTypes"></select> <input type="submit"
-						wicket:id="saveType" value="Сохранить" />
-				</form></td>
-		</tr>
-	</table>
-	<wicket:fragment wicket:id="tooltip-fragment">
-		<span wicket:id="name" class="fragment">[description]</span>
-	</wicket:fragment>
+	<form wicket:id="formregType">
+		<table class="regprod">
+			<tr>
+				<td colspan="2" align="center"><span wicket:id="regOrUpdate"></span></td>
+			</tr>
+			<tr>
+				<td><span wicket:id="feedback" /></td>
+			</tr>
+			<tr>
+				<td>Название типа:</td>
+				<td><input class="field" type="text" wicket:id="typeName" /></td>
+			</tr>
+			<tr>
+				<td>Тип к которому относится данный подтип:</td>
+				<td><select class="field" wicket:id="ParentTypes"></select></td>
+			</tr>
+			<tr>
+				<td><input class="field" type="submit" wicket:id="saveType"
+					value="Сохранить" /></td>
+			</tr>
+		</table>
+		<a wicket:id="BackToTypes">Back</a>
+	</form>
 </wicket:panel>
 
 

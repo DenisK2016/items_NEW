@@ -42,7 +42,7 @@ public class TypeInfo extends Panel {
 			add(new Label("parenttype",
 					String.format("%d %s", type.getParentType().getId(), type.getParentType().getTypeName())));
 		} else {
-			add(new Label("parenttype", " "));
+			add(new Label("parenttype", "-"));
 		}
 		add(new Label("user", String.format("%d %s", type.getIdUser().getId(), type.getIdUser().getLogin())));
 

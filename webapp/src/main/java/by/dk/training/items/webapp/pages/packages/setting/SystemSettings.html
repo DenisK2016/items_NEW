@@ -1,0 +1,44 @@
+<wicket:panel>
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen"
+		title="Stylesheet" />
+	<form wicket:id="formSetting">
+		<span wicket:id="feedback"></span>
+		<table class="regprod">
+			<tr>
+				<td colspan="2" align="center">Настройка системы</td>
+			</tr>
+			<tr>
+				<td>Укажите максимальную цену для ввоза в месяц(в бел.рублях):</td>
+				<td align="center"><input type="text" wicket:id="maxPrice"></input></td>
+			</tr>
+			<tr>
+				<td>Укажите максимальный вес для ввоза в месяц(в кг):</td>
+				<td align="center"><input type="text" wicket:id="maxWeight"></input></td>
+			</tr>
+			<tr>
+				<td>Укажите стоимость килограмма при привыщении лимита(в
+					бел.руб.):</td>
+				<td align="center"><input type="text" wicket:id="priceWeight"></input></td>
+			</tr>
+			<tr>
+				<td>Укажите размер налога от цены превышения(в %):</td>
+				<td align="center"><input type="text" wicket:id="percent"></input></td>
+			</tr>
+			<tr>
+				<td>Укажите количество дней на оплату налога:</td>
+				<td align="center"><input type="text"
+					wicket:id="paymentDeadline"></input></td>
+			</tr>
+			<tr>
+				<td>Укажите размер штрафа в день при просрочке оплаты(в %):</td>
+				<td align="center"><input type="text" wicket:id="percentFine"></input></td>
+			</tr>
+			<tr>
+				<td><button wicket:id="save">Сохранить</button></td>
+				<td><a wicket:id="back">Назад</a></td>
+			</tr>
+		</table>
+	</form>
+
+
+</wicket:panel>

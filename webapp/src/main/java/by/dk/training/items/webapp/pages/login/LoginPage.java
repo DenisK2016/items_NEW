@@ -40,7 +40,9 @@ public class LoginPage extends WebPage {
 		}
 
 		final Form<Void> form = new Form<Void>(ID_FORM);
-		form.add(new FeedbackPanel("feedbackpanel"));
+		FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackpanel");
+		feedBackPanel.setOutputMarkupId(true);
+		form.add(feedBackPanel);
 		form.setDefaultModel(new CompoundPropertyModel<LoginPage>(this));
 		form.add(new RequiredTextField<String>("username"));
 		form.add(new PasswordTextField("password"));
@@ -66,8 +68,9 @@ public class LoginPage extends WebPage {
 
 		final ModalWindow modal1;
 		add(modal1 = new ModalWindow("modal1"));
-		modal1.setTitle("Регистрация нового пользователя");
-
+		modal1.setCssClassName("modal_window");
+		modal1.setInitialHeight(500);
+		modal1.setResizable(false);
 		this.setOutputMarkupId(true);
 		add(new AjaxLink<Void>("newUser") {
 			@Override
@@ -88,8 +91,10 @@ public class LoginPage extends WebPage {
 
 		final ModalWindow modal2;
 		add(modal2 = new ModalWindow("modal2"));
-		modal2.setTitle("Восстановление пароля");
 
+		modal2.setResizable(false);
+		modal2.setCssClassName("modal_window");
+		modal2.setInitialHeight(350);
 		this.setOutputMarkupId(true);
 		add(new AjaxLink<Void>("passwordRestore") {
 			@Override

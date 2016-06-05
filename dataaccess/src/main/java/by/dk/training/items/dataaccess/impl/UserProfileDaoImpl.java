@@ -50,10 +50,14 @@ public class UserProfileDaoImpl extends AbstractDaoImpl<UserProfile, Long> imple
 		boolean post = (filter.getPost() != null);
 		boolean rank = (filter.getRank() != null);
 		boolean email = (filter.getEmail() != null);
-		boolean filt = (fName || lName || login || create || stat || post || rank || email);
+		boolean id = (filter.getId() != null);
+		boolean password = filter.getPassword() != null;
+		boolean filt = (fName || lName || login || create || stat || post || rank || email || id || password);
 
 		if (filt) {
+			Predicate idEqualCondition = cb.equal(from.get(UserProfile_.id), filter.getId());
 			Predicate loginEqualCondition = cb.equal(from.get(UserProfile_.login), filter.getLogin());
+			Predicate passwordEqualCondition = cb.equal(from.get(UserProfile_.password), filter.getPassword());
 			Predicate fNameEqualCondition = cb.equal(
 					from.get(UserProfile_.userCredentials).get(UserCredentials_.firstName), filter.getFirstName());
 			Predicate lNameEqualCondition = cb
@@ -69,7 +73,8 @@ public class UserProfileDaoImpl extends AbstractDaoImpl<UserProfile, Long> imple
 			Predicate emailEqualCondition = cb.equal(from.get(UserProfile_.userCredentials).get(UserCredentials_.email),
 					filter.getEmail());
 			cq.where(cb.or(loginEqualCondition, fNameEqualCondition, lNameEqualCondition, createdEqualCondition,
-					statusEqualCondition, postEqualCondition, rankEqualCondition, emailEqualCondition));
+					statusEqualCondition, postEqualCondition, rankEqualCondition, emailEqualCondition, idEqualCondition,
+					passwordEqualCondition));
 		}
 
 		// set fetching
@@ -84,12 +89,13 @@ public class UserProfileDaoImpl extends AbstractDaoImpl<UserProfile, Long> imple
 		// set sort params
 		if (filter.getSortProperty() != null) {
 			boolean log = filter.getSortProperty() == UserProfile_.login;
-			boolean id = filter.getSortProperty() == UserProfile_.id;
+			boolean idn = filter.getSortProperty() == UserProfile_.id;
 			boolean pass = filter.getSortProperty() == UserProfile_.password;
-			if (log || id || pass) {
+			if (log || idn || pass) {
 				cq.orderBy(new OrderImpl(from.get(filter.getSortProperty()), filter.isSortOrder()));
 			} else {
-				cq.orderBy(new OrderImpl(from.get(UserProfile_.userCredentials).get(filter.getSortProperty()), filter.isSortOrder()));
+				cq.orderBy(new OrderImpl(from.get(UserProfile_.userCredentials).get(filter.getSortProperty()),
+						filter.isSortOrder()));
 			}
 		}
 
@@ -122,6 +128,35 @@ public class UserProfileDaoImpl extends AbstractDaoImpl<UserProfile, Long> imple
 		if (filter.getOffset() != null && filter.getLimit() != null) {
 			q.setFirstResult(filter.getOffset());
 			q.setMaxResults(filter.getLimit());
+		}
+	}
+
+	@Override
+	public UserProfile find(String login, String password) {
+
+		EntityManager em = getEntityManager();
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+
+		CriteriaQuery<UserProfile> cq = cb.createQuery(UserProfile.class);
+
+		Root<UserProfile> from = cq.from(UserProfile.class);
+
+		cq.select(from);
+		Predicate usernameEqualCondition = cb.equal(from.get(UserProfile_.login), login);
+		Predicate passwEqualCondition = cb.equal(from.get(UserProfile_.password), password);
+		cq.where(cb.and(usernameEqualCondition, passwEqualCondition));
+
+		TypedQuery<UserProfile> q = em.createQuery(cq);
+
+		List<UserProfile> allitems = q.getResultList();
+
+		if (allitems.isEmpty()) {
+			return null;
+		} else if (allitems.size() == 1) {
+			return allitems.get(0);
+		} else {
+			throw new IllegalArgumentException("==more than 1 user found==");
 		}
 	}
 

@@ -1,5 +1,10 @@
 <wicket:panel>
-	<table>
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen"
+		title="Stylesheet" />
+	<table class="regprod">
+		<tr>
+			<td colspan="2" align="center">Информация о продукте</td>
+		</tr>
 		<tr>
 			<td>Номер продукта:</td>
 			<td wicket:id="productid"></td>
@@ -18,21 +23,26 @@
 		</tr>
 		<tr>
 			<td>Статус продукта для ввоза:</td>
-			<td> <input type="checkbox" wicket:id="productstatus"></input></td>
+			<td>
+				<div class="squaredOne">
+					<input id="squaredOne" type="checkbox" wicket:id="productstatus"></input>
+					<label for="squaredOne"></label>
+				</div>
+			</td>
 		</tr>
 		<tr>
 			<td>Создатель продукта:</td>
 			<td wicket:id="user"></td>
 		</tr>
-		
+
 		<tr>
 			<td>Список типов продукта:</td>
-			<td><select wicket:id="types"></select></td>
+			<td><select class="field" wicket:id="types"></select></td>
 		</tr>
 	</table>
 
 
 
-	<a wicket:id="back">Back</a>
+	<a wicket:id="back">Назад</a>
 
 </wicket:panel>

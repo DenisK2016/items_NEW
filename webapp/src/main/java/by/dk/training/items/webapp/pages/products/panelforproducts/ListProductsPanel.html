@@ -1,32 +1,64 @@
 <wicket:panel>
-	<table cellspacing="0" class="dataview">
-		<tr>
-			<th></th>
-			<th wicket:id="orderById">ID</th>
-			<th wicket:id="orderByProductName">Product name</th>
-			<th wicket:id="orderByPrice">Price</th>
-			<th wicket:id="orderByLimit">Limit</th>
-			<th wicket:id="orderByStatus">Status</th>
-			<wicket:enclosure child="orderByUser">
-				<th wicket:id="orderByUser">User</th>
-			</wicket:enclosure>
+	<table>
 
-		</tr>
-		<tr wicket:id="productlist">
-			<td><a wicket:id="infoProduct">Выбрать</a></td>
-			<td><span wicket:id="productid">[productid]</span></td>
-			<td><span wicket:id="productname">[productname]</span></td>
-			<td><span wicket:id="productprice">[productprice]</span></td>
-			<td><span wicket:id="productlimit">[productlimit]</span></td>
-			<td><input type="checkbox" wicket:id="productstatus"></input></td>
-			<wicket:enclosure child="idUser">
-				<td><span wicket:id="idUser">[users]</span></td>
-			</wicket:enclosure>
-			<td><wicket:enclosure child="deletelink">
-					<a wicket:id="deletelink">Удалить</a>
-				</wicket:enclosure> <a wicket:id="updateLink">Изменить</a></td>
-		</tr>
 	</table>
-	<span wicket:id="navigator">[dataview navigator]</span>
+	<div wicket:id="container">
+
+		<table cellspacing="0" class="dataview-product">
+			<tr>
+				<td>Найти</td>
+				<td><input class="field-product" type="text"
+					wicket:id="idFilter" style="margin-left: 0px;" placeholder="По id" /></td>
+				<td><input class="field-product " type="text"
+					wicket:id="nameFilter" style="margin-left: 29px;"
+					placeholder="По названию" /></td>
+				<td><input class="field-product " type="text"
+					wicket:id="priceFilter" style="margin-left: 4px; width: 77px;"
+					placeholder="По цене" /></td>
+				<td><input class="field-product " type="text"
+					wicket:id="weightFilter" style="margin-left: 22px;"
+					placeholder="По весу" /></td>
+				<td><input type="checkbox" wicket:id="status"
+					style="margin-left: 27px;" /></td>
+				<td><input class="field-product" type="text"
+					wicket:id="userFilter" style="margin-left: 19px;"
+					placeholder="По создателю" /></td>
+				<td><input type="checkbox" wicket:id="myProd"
+					style="margin-left: 40px;" /></td>
+			</tr>
+			<tr>
+				<th></th>
+				<th wicket:id="orderById">Номер ID</th>
+				<th wicket:id="orderByProductName">Название продукта</th>
+				<th wicket:id="orderByPrice">Цена</th>
+				<th wicket:id="orderByWeight">Вес продукта</th>
+				<th wicket:id="orderByStatus">Статус</th>
+				<wicket:enclosure child="orderByUser">
+					<th wicket:id="orderByUser">Создатель</th>
+				</wicket:enclosure>
+
+			</tr>
+			<tr wicket:id="productlist">
+				<td><a class="icon_select" wicket:id="infoProduct">&#10148;</a></td>
+				<td align="center"><span wicket:id="productid">[productid]</span></td>
+				<td align="center"><span wicket:id="productname">[productname]</span></td>
+				<td align="center"><span wicket:id="productprice">[productprice]</span></td>
+				<td align="center"><span wicket:id="productweight">[productweight]</span></td>
+				<td align="center"><div class="squaredOne">
+						<input id="squaredOne" type="checkbox" wicket:id="productstatus"></input>
+						<label for="squaredOne"></label>
+					</div></td>
+				<wicket:enclosure child="idUser">
+					<td align="center"><span wicket:id="idUser">[users]</span></td>
+				</wicket:enclosure>
+				<td align="center"><wicket:enclosure child="deletelink">
+						<a wicket:id="deletelink" class="icon_delete">&#10007;</a>
+					</wicket:enclosure></td>
+				<td align="center"><a class="icon-edit" wicket:id="updateLink">&#9997;</a></td>
+			</tr>
+		</table>
+		<span wicket:id="navigator">[dataview navigator]</span>
+	</div>
 	<div wicket:id="modal1"></div>
+	<div wicket:id="modalUpdate"></div>
 </wicket:panel>

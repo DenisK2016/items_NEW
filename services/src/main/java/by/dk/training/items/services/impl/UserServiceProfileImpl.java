@@ -1,5 +1,8 @@
 package by.dk.training.items.services.impl;
 
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +32,15 @@ public class UserServiceProfileImpl implements UserProfileService {
 	@Override
 	public void register(UserProfile user, UserCredentials userCredentials) {
 
-		userCredentials.setCreated(new Date());
+		Date d = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(d);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		d.setTime(cal.getTime().getTime());
+		userCredentials.setCreated(d);
 		userCredentials.setStatus(StatusUser.OFFICER);
 		userCredentials.setUser(user);
 		user.setUserCredentials(userCredentials);
@@ -71,6 +82,16 @@ public class UserServiceProfileImpl implements UserProfileService {
 		LOGGER.info("UserCredentials update, new and old: {}", userCredentials,
 				userCredentialsDao.get(userCredentials.getId()));
 
+		Date d = userCredentials.getCreated();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(d);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		d.setTime(cal.getTime().getTime());
+		userCredentials.setCreated(d);
+
 		userCredentialsDao.update(userCredentials);
 	}
 
@@ -105,6 +126,18 @@ public class UserServiceProfileImpl implements UserProfileService {
 		LOGGER.info("User count(): {}", filter);
 
 		return userDao.count(filter);
+	}
+
+	@Override
+	public UserProfile getByNameAndPassword(String login, String password) {
+
+		return userDao.find(login, password);
+	}
+
+	@Override
+	public Collection<? extends String> resolveRoles(Long id) {
+		UserCredentials userCredentials = userCredentialsDao.get(id);
+		return Collections.singletonList(userCredentials.getStatus().name());
 	}
 
 }

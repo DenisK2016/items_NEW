@@ -10,10 +10,11 @@ import by.dk.training.items.datamodel.Product;
 import by.dk.training.items.datamodel.Recipient;
 import by.dk.training.items.datamodel.UserProfile;
 
-public class PackageFilter implements Serializable{
+public class PackageFilter implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	private Long id;
 	private BigDecimal price;
 	private Double weight;
 	private Date date;
@@ -25,6 +26,9 @@ public class PackageFilter implements Serializable{
 	private UserProfile user;
 	private Recipient recipint;
 	private Product product;
+	private BigDecimal tax;
+	private Date startDate;
+	private Date endDate;
 
 	private SingularAttribute sortProperty;
 	private boolean sortOrder;
@@ -34,6 +38,38 @@ public class PackageFilter implements Serializable{
 	private boolean isFetchUser;
 	private boolean isFetchRecipient;
 	private boolean isFetchProduct;
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public BigDecimal getTax() {
+		return tax;
+	}
+
+	public void setTax(BigDecimal tax) {
+		this.tax = tax;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public UserProfile getUser() {
 		return user;

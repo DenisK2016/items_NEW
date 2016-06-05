@@ -29,13 +29,8 @@ import by.dk.training.items.datamodel.Ranks;
 import by.dk.training.items.datamodel.Recipient;
 import by.dk.training.items.datamodel.StatusUser;
 import by.dk.training.items.datamodel.Type;
-import by.dk.training.items.datamodel.UserProfile;
-import by.dk.training.items.services.PackageService;
-import by.dk.training.items.services.ProductService;
-import by.dk.training.items.services.RecipientService;
-import by.dk.training.items.services.TypeService;
-import by.dk.training.items.services.UserProfileService;
 import by.dk.training.items.datamodel.UserCredentials;
+import by.dk.training.items.datamodel.UserProfile;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:service-context-test.xml" })
@@ -178,7 +173,7 @@ public class UserServiceTest {
 
 		Product product = new Product();
 
-		product.setLimit("2 шт/год");
+		product.setWeight(4.0);
 		product.setNameProduct("TVset");
 		product.setPriceProduct(new BigDecimal(1000000));
 		product.setStatus(true);
@@ -411,7 +406,7 @@ public class UserServiceTest {
 
 		product.setNameProduct("Ноутбук");
 		product.setPriceProduct(new BigDecimal(300000));
-		product.setLimit("1 шт/год");
+		product.setWeight(4.0);
 		product.setStatus(true);
 		productsService.register(product);
 		product.setTypes(type);
@@ -420,7 +415,7 @@ public class UserServiceTest {
 
 		product1.setNameProduct("Телевизор");
 		product1.setPriceProduct(new BigDecimal(500000));
-		product1.setLimit("1 шт/год");
+		product1.setWeight(4.0);
 		product1.setStatus(true);
 		productsService.register(product1);
 		product1.setTypes(type);
@@ -429,7 +424,7 @@ public class UserServiceTest {
 
 		product2.setNameProduct("Принтер");
 		product2.setPriceProduct(new BigDecimal(200000));
-		product2.setLimit("1 шт/год");
+		product2.setWeight(4.0);
 		product2.setStatus(true);
 		productsService.register(product2);
 		product2.setTypes(type);
@@ -530,7 +525,7 @@ public class UserServiceTest {
 
 		product.setNameProduct("Ноутбук");
 		product.setPriceProduct(new BigDecimal(300000));
-		product.setLimit("1 шт/год");
+		product.setWeight(4.0);
 		product.setStatus(true);
 		productsService.register(product);
 		product.setTypes(type);
@@ -540,7 +535,7 @@ public class UserServiceTest {
 		product1 = new Product();
 		product1.setNameProduct("Телевизор");
 		product1.setPriceProduct(new BigDecimal(500000));
-		product1.setLimit("1 шт/год");
+		product1.setWeight(4.0);
 		product1.setStatus(true);
 		productsService.register(product1);
 		product1.setTypes(type);
@@ -550,7 +545,7 @@ public class UserServiceTest {
 		product2 = new Product();
 		product2.setNameProduct("Принтер");
 		product2.setPriceProduct(new BigDecimal(200000));
-		product2.setLimit("1 шт/год");
+		product2.setWeight(4.0);
 		product2.setStatus(true);
 		productsService.register(product2);
 		product2.setTypes(type);
@@ -595,7 +590,7 @@ public class UserServiceTest {
 			packService.register(pack);
 
 			List<Product> products = productsService.getAll();
-			pack.setProducts(products);
+//			pack.setProducts(products);
 
 			packService.update(pack);
 

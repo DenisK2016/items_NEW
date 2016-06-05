@@ -1,5 +1,10 @@
 <wicket:panel>
-	<table>
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen"
+		title="Stylesheet" />
+	<table class="regprod">
+		<tr>
+			<td colspan="2" align="center">Информация о пользователе</td>
+		</tr>
 		<tr>
 			<td>Id пользователя:</td>
 			<td wicket:id="id"></td>
@@ -7,10 +12,6 @@
 		<tr>
 			<td>Логин пользователя:</td>
 			<td wicket:id="login"></td>
-		</tr>
-		<tr>
-			<td>Пароль пользователя:</td>
-			<td wicket:id="password"></td>
 		</tr>
 		<tr>
 			<td>Имя:</td>
@@ -42,20 +43,21 @@
 		</tr>
 		<tr>
 			<td>Список принятых посылок:</td>
-			<td><select wicket:id="packs"></select> <a
-				wicket:id="infoPackage">Информация о пакете</a></td>
+			<td><select class="field" wicket:id="packs"></select> <a
+				style="color: #0f0fd6" wicket:id="infoPackage">Информация о
+					пакете</a></td>
 		</tr>
 		<tr>
 			<td>Список созданных продуктов:</td>
-			<td><select wicket:id="listProd"></select></td>
+			<td><select class="field" wicket:id="listProd"></select></td>
 		</tr>
 		<tr>
 			<td>Список созданных типов:</td>
-			<td><select wicket:id="listType"></select></td>
+			<td><select class="field" wicket:id="listType"></select></td>
 		</tr>
 		<tr>
 			<td>Список созданных получателей:</td>
-			<td><select wicket:id="listRec"></select></td>
+			<td><select class="field" wicket:id="listRec"></select></td>
 		</tr>
 	</table>
 

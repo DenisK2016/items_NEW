@@ -1,42 +1,45 @@
 package by.dk.training.items.webapp.pages.types.panelfortypes;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.metamodel.SingularAttribute;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.WindowClosedCallback;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
-import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
+import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultNestedTree;
+import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
+import org.apache.wicket.extensions.markup.html.repeater.tree.content.Folder;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+
+import com.googlecode.wicket.jquery.ui.JQueryIcon;
+import com.googlecode.wicket.jquery.ui.panel.JQueryFeedbackPanel;
+import com.googlecode.wicket.jquery.ui.widget.menu.ContextMenu;
+import com.googlecode.wicket.jquery.ui.widget.menu.ContextMenuBehavior;
+import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
+import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
 
 import by.dk.training.items.dataaccess.filters.TypeFilter;
 import by.dk.training.items.datamodel.Type;
-import by.dk.training.items.datamodel.Type_;
 import by.dk.training.items.services.TypeService;
-import by.dk.training.items.webapp.pages.types.TypePage;
-import by.dk.training.items.webapp.pages.types.formforreg.TypeRegPage;
 
-@AuthorizeAction(roles = { "ADMIN", "COMMANDER" }, action = Action.RENDER)
+@AuthorizeAction(roles = { "ADMIN", "COMMANDER", "OFFICER" }, action = Action.RENDER)
 public class ListTypesPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
 	private TypeService typeService;
+	private ModalWindow modal1;
+	private ContextMenu menu;
 
 	public ListTypesPanel(String id) {
 		super(id);
@@ -47,119 +50,110 @@ public class ListTypesPanel extends Panel {
 	protected void onInitialize() {
 		super.onInitialize();
 
-		final ModalWindow modal1 = new ModalWindow("modal1");
-		modal1.setTitle("Информация о получателе");
-		modal1.setWindowClosedCallback(new WindowClosedCallback() {
+		Form form = new Form<>("form");
+		FeedbackPanel feedBack = new JQueryFeedbackPanel("feedback");
+		form.add(feedBack.setOutputMarkupId(true));
 
-			@Override
-			public void onClose(AjaxRequestTarget target) {
-				target.add(ListTypesPanel.this);
-
-			}
-		});
-		this.setOutputMarkupId(true);
-		add(modal1);
-		SortableTypeProvider dataProvider = new SortableTypeProvider();
-		DataView<Type> dataView = new DataView<Type>("simple", dataProvider, 5) {
+		menu = new ContextMenu("contextMenu", newMenuItemList()) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(Item<Type> item) {
-				Type type = item.getModelObject();
-
-				item.add(new AjaxLink<Void>("infoType") {
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						modal1.setContent(new TypeInfo(modal1, type));
-						modal1.show(target);
-					}
-				});
-				item.add(new Label("typeid", type.getId()));
-				item.add(new Label("typename", type.getTypeName()));
-				if (type.getParentType() != null) {
-					item.add(new Label("parentname", type.getParentType().getId()));
-				} else {
-					item.add(new Label("parentname", " "));
-				}
-				Label idUser = new Label("idUser", type.getIdUser().getId());
-				item.add(idUser);
-
-				item.add(new Link<TypePage>("deletelink") {
-
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						typeService.delete(type.getId());
-						setResponsePage(new TypePage());
-					}
-				});
-
-				item.add(new Link<TypeRegPage>("updateType") {
-
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						setResponsePage(new TypeRegPage(type));
-
-					}
-				});
+			protected void onContextMenu(AjaxRequestTarget target, Component component) {
 
 			}
 
+			@Override
+			public void onClick(AjaxRequestTarget target, IMenuItem item) {
+				target.add(this);
+				target.add(feedBack);
+			}
 		};
-		add(dataView);
+		menu.setOutputMarkupId(true);
+		add(menu);
 
-		add(new OrderByBorder("orderById", Type_.id, dataProvider));
-		add(new OrderByBorder("orderByTypeName", Type_.typeName, dataProvider));
-		add(new OrderByBorder("orderByParentTypeId", Type_.parentType, dataProvider));
-		OrderByBorder ord = new OrderByBorder("orderByUser", Type_.idUser, dataProvider);
-		add(ord);
+		form.add(new DefaultNestedTree<Type>("treeTypes", new TreeTypeProvider()) {
 
-		add(new PagingNavigator("navigator", dataView));
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected Component newContentComponent(String id, IModel<Type> node) {
+
+				Folder fold = new Folder<Type>(id, this, node) {
+					@Override
+					protected IModel<?> newLabelModel(IModel<Type> model) {
+						return new PropertyModel<String>(model, "typeName");
+					}
+
+					@Override
+					protected boolean isClickable() {
+						return true;
+					}
+				};
+				fold.add(new ContextMenuBehavior(menu));
+				return fold;
+
+			}
+		});
+		add(form);
 
 	}
 
-	private class SortableTypeProvider extends SortableDataProvider<Type, Serializable> {
+	static List<IMenuItem> newMenuItemList() {
+		List<IMenuItem> list = new ArrayList<IMenuItem>();
+
+		list.add(new MenuItem("Информация о типе", JQueryIcon.FLAG));
+		list.add(new MenuItem("Продукты типа", JQueryIcon.BOOKMARK));
+
+		return list;
+	}
+
+	private class TreeTypeProvider implements ITreeProvider<Type> {
 
 		private static final long serialVersionUID = 1L;
-
 		private TypeFilter typeFilter;
 
-		public SortableTypeProvider() {
-			super();
+		public TreeTypeProvider() {
 			typeFilter = new TypeFilter();
-			typeFilter.setFetchUser(true);
 			typeFilter.setFetchParentType(true);
-			setSort((Serializable) Type_.id, SortOrder.ASCENDING);
+			typeFilter.setFetchUser(true);
+			typeFilter.setFetchChildTypes(true);
 		}
 
 		@Override
-		public Iterator<Type> iterator(long first, long count) {
-
-			Serializable property = getSort().getProperty();
-			SortOrder propertySortOrder = getSortState().getPropertySortOrder(property);
-
-			typeFilter.setSortProperty((SingularAttribute) property);
-			typeFilter.setSortOrder(propertySortOrder.equals(SortOrder.ASCENDING) ? true : false);
-
-			typeFilter.setLimit((int) count);
-			typeFilter.setOffset((int) first);
-			return typeService.find(typeFilter).iterator();
+		public void detach() {
 
 		}
 
 		@Override
-		public long size() {
-			return typeService.count(typeFilter);
+		public Iterator<Type> getRoots() {
+			typeFilter.setId(null);
+			List<Type> listT = new ArrayList<Type>(); // Типы у которых нет
+														// парентов
+			for (Type t : typeService.find(typeFilter)) {
+				if (t.getParentType() == null) {
+					listT.add(t);
+				}
+			}
+			return listT.iterator();
+		}
+
+		@Override
+		public boolean hasChildren(Type type) {
+			typeFilter.setId(type.getId());
+			return type.getChildTypes() == null || !typeService.find(typeFilter).get(0).getChildTypes().isEmpty();
+		}
+
+		@Override
+		public Iterator<Type> getChildren(Type type) {
+			return type.getChildTypes().iterator();
 		}
 
 		@Override
 		public IModel<Type> model(Type object) {
-			return new Model(object);
+			return new Model<Type>(object);
 		}
 
 	}
+
 }

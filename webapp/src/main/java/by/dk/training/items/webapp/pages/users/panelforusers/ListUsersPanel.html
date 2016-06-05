@@ -1,34 +1,71 @@
 <wicket:panel>
-	<table cellspacing="0" class="dataview">
+	<div wicket:id="container">
+		<table cellspacing="0" class="dataview-users">
+			<tr>
+				<td>Найти</td>
+				<td><input class="field-users" type="text"
+					wicket:id="dateFilter" placeholder="по дате регистр." /><br>
+					<input class="field-users" type="text" wicket:id="idFilter"
+					placeholder="по id" /></td>
+				<td><input class="field-users" type="text"
+					wicket:id="postFilter" placeholder="по должности" /><br> <input
+					class="field-users" type="text" wicket:id="loginFilter"
+					placeholder="По логину" /></td>
+				<td><input class="field-users" type="text"
+					wicket:id="fNameFilter" placeholder="по имени" /></td>
+				<td><input class="field-users" type="text"
+					wicket:id="lNameFilter" placeholder="по фамилии" /></td>
+				<td><span class="field-users" style="margin-left: 33px;">по
+						роли:</span><br> <select class="field-users"
+					wicket:id="statusFilter" style="margin-left: 33px; width: 110px;" /></td>
+				<td><input class="field-users" type="text"
+					wicket:id="emailFilter" style="margin-left: 26px;"
+					placeholder="по почте" /></td>
+				<td colspan="2"><span class="field-users"
+					style="margin-left: 0px;">по званию:</span><br> <select
+					class="field-users" wicket:id="rankFilter" style="width: 109px;" /></td>
+				<td></td>
+			</tr>
+			<tr>
+				<th></th>
+				<th wicket:id="orderById">Номер ID</th>
+				<th wicket:id="orderByLogin">Логин</th>
+				<th wicket:id="orderByFName">Имя</th>
+				<th wicket:id="orderByLName">Фамилия</th>
+				<th wicket:id="orderByStatus">Роль пользователя</th>
+				<th wicket:id="orderByMail">Почта</th>
+			</tr>
+			<tr wicket:id="userlist">
+				<td><a class="icon_select" wicket:id="infoUser">&#10148;</a></td>
+				<td align="center"><span wicket:id="userid">[userid]</span></td>
+				<td align="center"><span wicket:id="userlogin">[userlogin]</span></td>
+				<td align="center"><span wicket:id="userfname">[userfname]</span></td>
+				<td align="center"><span wicket:id="userlname">[userlname]</span></td>
+				<td align="center"><span wicket:id="userstatus">[userstatus]</span></td>
+				<td align="center"><span wicket:id="useremail">[useremail]</span></td>
+				<td align="center"><a class="icon_delete"
+					wicket:id="deletelink">&#10007;</a></td>
+				<td align="center"><a class="icon-edit" wicket:id="updateUser">&#9997;</a></td>
+			</tr>
+		</table>
+		<span wicket:id="navigator">[dataview navigator]</span>
+	</div>
+
+	<table class="table-packege">
 		<tr>
-			<th></th>
-			<th wicket:id="orderById">ID</th>
-			<th wicket:id="orderByLogin">Login</th>
-			<th wicket:id="orderByPassword">Password</th>
-			<th wicket:id="orderByFName">First name</th>
-			<th wicket:id="orderByLName">Last name</th>
-			<th wicket:id="orderByCreated">Created</th>
-			<th wicket:id="orderByStatus">User status</th>
-			<th wicket:id="orderByPost">User post</th>
-			<th wicket:id="orderByRank">User rank</th>
-			<th wicket:id="orderByMail">User email</th>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
 		</tr>
-		<tr wicket:id="userlist">
-			<td><a wicket:id="infoUser">Выбрать</a></td>
-			<td><span wicket:id="userid">[userid]</span></td>
-			<td><span wicket:id="userlogin">[userlogin]</span></td>
-			<td><span wicket:id="userpassword">[userPassword]</span></td>
-			<td><span wicket:id="userfname">[userfname]</span></td>
-			<td><span wicket:id="userlname">[userlname]</span></td>
-			<td><span wicket:id="usercreated">[usercreated]</span></td>
-			<td><span wicket:id="userstatus">[userstatus]</span></td>
-			<td><span wicket:id="userpost">[userpost]</span></td>
-			<td><span wicket:id="userrank">[userrank]</span></td>
-			<td><span wicket:id="useremail">[useremail]</span></td>
-			<td><a wicket:id="deletelink">Удалить</a>/<a
-				wicket:id="updateUser">Изменить</a></td>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
 		</tr>
 	</table>
-	<span wicket:id="navigator">[dataview navigator]</span>
 	<div wicket:id="modal1"></div>
+	<div wicket:id="modalUpdate"></div>
 </wicket:panel>

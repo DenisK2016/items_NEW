@@ -37,6 +37,10 @@ public class Type implements Serializable {
 	@OneToMany(mappedBy = "parentType", fetch = FetchType.LAZY)
 	private List<Type> childTypes = new ArrayList<>();
 
+	@ManyToOne(targetEntity = UserProfile.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user")
+	private UserProfile idUser;
+
 	public List<Type> getChildTypes() {
 		return childTypes;
 	}
@@ -47,6 +51,14 @@ public class Type implements Serializable {
 
 	public Type() {
 		super();
+	}
+
+	public UserProfile getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(UserProfile idUser) {
+		this.idUser = idUser;
 	}
 
 	public Type getParentType() {

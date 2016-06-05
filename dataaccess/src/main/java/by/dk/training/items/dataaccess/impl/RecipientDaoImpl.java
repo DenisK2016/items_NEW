@@ -33,24 +33,33 @@ public class RecipientDaoImpl extends AbstractDaoImpl<Recipient, Long> implement
 
 		CriteriaQuery<Recipient> cq = cb.createQuery(Recipient.class);
 
-		Root<Recipient> from = cq.from(Recipient.class); 
+		Root<Recipient> from = cq.from(Recipient.class);
 
-		cq.select(from); 
+		cq.select(from);
 
 		boolean name = (filter.getName() != null);
 		boolean city = (filter.getCity() != null);
 		boolean address = (filter.getAddress() != null);
-		boolean filt = name || city || address;
+		boolean user = (filter.getUser() != null);
+		boolean id = (filter.getId() != null);
+		boolean filt = name || city || address || user || id;
 		if (filt) {
-			Predicate NameEqualCondition = cb.equal(from.get(Recipient_.name), filter.getName());
+			Predicate idEqualCondition = cb.equal(from.get(Recipient_.id), filter.getId());
+			Predicate nameEqualCondition = cb.equal(from.get(Recipient_.name), filter.getName());
 			Predicate cityEqualCondition = cb.equal(from.get(Recipient_.city), filter.getCity());
 			Predicate addressEqualCondition = cb.equal(from.get(Recipient_.address), filter.getAddress());
-			cq.where(cb.or(NameEqualCondition, cityEqualCondition, addressEqualCondition));
+			Predicate userEqualCondition = cb.equal(from.get(Recipient_.idUser), filter.getUser());
+			cq.where(cb.or(idEqualCondition, nameEqualCondition, cityEqualCondition, addressEqualCondition,
+					userEqualCondition));
 		}
 
 		// set fetching
 		if (filter.isFetchPackages()) {
 			from.fetch(Recipient_.packages, JoinType.LEFT);
+		}
+
+		if (filter.isFetchUser()) {
+			from.fetch(Recipient_.idUser, JoinType.LEFT);
 		}
 
 		// set sort params
@@ -68,27 +77,26 @@ public class RecipientDaoImpl extends AbstractDaoImpl<Recipient, Long> implement
 
 		// set execute query
 		List<Recipient> allitems = q.getResultList();
-		
 
 		return allitems;
 	}
-	
+
 	@Override
 	public Long count(RecipientFilter filter) {
 		EntityManager em = getEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-        Root<Recipient> from = cq.from(Recipient.class);
-        cq.select(cb.count(from));
-        TypedQuery<Long> q = em.createQuery(cq);
-        return q.getSingleResult();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+		Root<Recipient> from = cq.from(Recipient.class);
+		cq.select(cb.count(from));
+		TypedQuery<Long> q = em.createQuery(cq);
+		return q.getSingleResult();
 	}
-	
+
 	protected void setPaging(RecipientFilter filter, TypedQuery<Recipient> q) {
-        if (filter.getOffset() != null && filter.getLimit() != null) {
-            q.setFirstResult(filter.getOffset());
-            q.setMaxResults(filter.getLimit());
-        }
-    }
+		if (filter.getOffset() != null && filter.getLimit() != null) {
+			q.setFirstResult(filter.getOffset());
+			q.setMaxResults(filter.getLimit());
+		}
+	}
 
 }

@@ -11,7 +11,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import by.dk.training.items.dataaccess.filters.RecipientFilter;
 import by.dk.training.items.datamodel.Recipient;
-import by.dk.training.items.services.RecipientService;
 import junit.framework.Assert;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,7 +30,7 @@ public class NewRecipientTest {
 
 		Recipient recipient;
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
 			recipient = new Recipient();
 
 			createRecipient(recipient, i);

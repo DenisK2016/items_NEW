@@ -5,25 +5,22 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.tooltip.CustomTooltipBehavior;
+import com.googlecode.wicket.jquery.ui.markup.html.link.AjaxLink;
 
 import by.dk.training.items.datamodel.Type;
 import by.dk.training.items.services.TypeService;
@@ -41,11 +38,22 @@ public class RegistryTypePanel extends Panel {
 	private List<Type> listType = typeService.getAll();
 	private String inTypes;
 	private List<String> namesType = new ArrayList<>();
-	private String descName = "Введите имя типа продукта";
-	private String descParType = "Здесь можно выбрать тип, к которому относится создаваемый тип.";
-	private String descSubmit = "Сохранить тип";
-	private String descLink = "На страницу с продуктами.";
 	private List<String> listParentsName;
+	private ModalWindow modalWindow;
+
+	public RegistryTypePanel(ModalWindow modalWindow) {
+		super(modalWindow.getContentId());
+		this.modalWindow = modalWindow;
+		type = new Type();
+
+	}
+
+	public RegistryTypePanel(ModalWindow modalWindow, Type type) {
+		super(modalWindow.getContentId());
+		this.modalWindow = modalWindow;
+		this.type = type;
+
+	}
 
 	public String getInTypes() {
 		return inTypes;
@@ -55,18 +63,6 @@ public class RegistryTypePanel extends Panel {
 		this.inTypes = inTypes;
 	}
 
-	public RegistryTypePanel(String id) {
-		super(id);
-		type = new Type();
-
-	}
-
-	public RegistryTypePanel(String id, Type type) {
-		super(id);
-		this.type = type;
-
-	}
-
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -74,10 +70,15 @@ public class RegistryTypePanel extends Panel {
 		form.add(new FeedbackPanel("feedback"));
 
 		TextField<String> typeName = new TextField<String>("typeName");
+		typeName.add(new AjaxFormComponentUpdatingBehavior("change") {
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+
+			}
+		});
 		typeName.setRequired(true);
 		typeName.add(StringValidator.maximumLength(100));
 		typeName.add(StringValidator.minimumLength(2));
-		typeName.add(new CoverTooltipBehavior(descName, null));
 
 		form.add(typeName);
 
@@ -137,17 +138,19 @@ public class RegistryTypePanel extends Panel {
 
 		DropDownChoice<String> dropDown = new DropDownChoice<String>("ParentTypes",
 				new PropertyModel<String>(this, "inTypes"), listParentsName);
+		dropDown.add(new AjaxFormComponentUpdatingBehavior("change") {
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+
+			}
+		});
 		dropDown.setNullValid(true);
-		dropDown.add(new CoverTooltipBehavior(descParType, null));
 		form.add(dropDown);
 
-		form.add(new SubmitLink("saveType") {
-
-			private static final long serialVersionUID = 1L;
+		form.add(new AjaxLink<Void>("saveType") {
 
 			@Override
-			public void onSubmit() {
-
+			public void onClick(AjaxRequestTarget target) {
 				if (inTypes != null) {
 					String nameType = inTypes.substring(inTypes.lastIndexOf("-") + 1);
 					int indexName = namesType.indexOf(nameType);
@@ -163,56 +166,25 @@ public class RegistryTypePanel extends Panel {
 				} else {
 					typeService.update(type);
 				}
-
+				modalWindow.close(target);
 				setResponsePage(new TypePage());
 			}
-		}.add(new CoverTooltipBehavior(descSubmit, null)));
+		});
 
 		add(form);
-
-		add(new Link<TypePage>("BackToTypes") {
-
-			private static final long serialVersionUID = 1L;
+		form.add(new AjaxLink<Void>("BackToTypes") {
 
 			@Override
-			public void onClick() {
-				setResponsePage(new TypePage());
-
+			public void onClick(AjaxRequestTarget target) {
+				modalWindow.close(target);
 			}
-		}.add(new CoverTooltipBehavior(descLink, null)));
+		});
 
-	}
-
-	private static Options newOptions() {
-		Options options = new Options();
-		options.set("track", true);
-		options.set("hide", "{ effect: 'drop', delay: 100 }");
-
-		return options;
-	}
-
-	class CoverTooltipBehavior extends CustomTooltipBehavior {
-		private static final long serialVersionUID = 1L;
-
-		private final String name;
-		private final String url;
-
-		public CoverTooltipBehavior(String name, String url) {
-			super(newOptions());
-
-			this.name = name;
-			this.url = url;
+		if (type.getId() == null) {
+			form.add(new Label("regOrUpdate", "Регистрация нового типа"));
+		} else {
+			form.add(new Label("regOrUpdate", "Изменение типа"));
 		}
-
-		@Override
-		protected WebMarkupContainer newContent(String markupId) {
-			Fragment fragment = new Fragment(markupId, "tooltip-fragment", RegistryTypePanel.this);
-			fragment.add(new Label("name", Model.of(this.name)));
-			// fragment.add(new ContextImage("cover", Model.of(this.url)));
-
-			return fragment;
-		}
-
 	}
 
 }

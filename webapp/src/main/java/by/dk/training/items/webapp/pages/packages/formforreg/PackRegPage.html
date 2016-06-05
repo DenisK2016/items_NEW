@@ -1,5 +1,31 @@
-<wicket:extend>
-	<h2>Packages</h2>
-	<br><br><br><br><br><br><br><br><br><br><br>
-	<wicket:container wicket:id="regPanPack"></wicket:container>
-</wicket:extend>
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+<meta charset="utf-8" />
+<title>Apache Wicket Quickstart</title>
+<link
+	href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold'
+	rel='stylesheet' type='text/css' />
+<link rel="stylesheet" href="style.css" type="text/css" media="screen"
+	title="Stylesheet" />
+</head>
+<body style="width: 86%;">
+	<div id="hd" style="margin-top: -95px;">
+		<wicket:container wicket:id="menu-panel"></wicket:container>
+	</div>
+	<div id="bd" class="body-container" style="height: 617px;">
+		<div wicket:id="regPanPack"></div>
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="ft" wicket:id="footer">
+		<div class="copyright-reg-package">
+			©<span wicket:id="current-year" />
+		</div>
+	</div>
+</body>
+</html>

@@ -72,9 +72,11 @@ public class UserInfo extends Panel {
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
+		super.onInitialize(); 
 		final ModalWindow modal2 = new ModalWindow("modal2");
-		modal2.setTitle("Информация о посылке");
+		modal2.setCssClassName("modal_window");
+		modal2.setInitialHeight(500);
+		modal2.setResizable(false);
 		modal2.setWindowClosedCallback(new WindowClosedCallback() {
 
 			@Override
@@ -88,7 +90,6 @@ public class UserInfo extends Panel {
 
 		add(new Label("id", userProfile.getId()));
 		add(new Label("login", userProfile.getLogin()));
-		add(new Label("password", userProfile.getPassword()));
 		add(new Label("fName", userProfile.getUserCredentials().getFirstName()));
 		add(new Label("lName", userProfile.getUserCredentials().getLastName()));
 		add(DateLabel.forDatePattern("usercreated", Model.of(userProfile.getUserCredentials().getCreated()),

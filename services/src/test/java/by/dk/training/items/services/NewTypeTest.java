@@ -15,6 +15,8 @@ public class NewTypeTest {
 
 	@Inject
 	private TypeService typeService;
+	@Inject
+	private UserProfileService userProfileService;
 
 	@Test
 	public void testType() {
@@ -24,33 +26,73 @@ public class NewTypeTest {
 		// typeService.delete(tp.getId());
 		// }
 
-		for (int i = 0; i < 30; i++) {
-			Type parentType = new Type();
-			Type subType1 = new Type();
-			Type subType2 = new Type();
+		Type subType1 = new Type();
+		Type subType2 = new Type();
+		Type subType3 = new Type();
+		Type subType4 = new Type();
+		Type subType5 = new Type();
+		Type subType6 = new Type();
+		Type subType7 = new Type();
+		Type subType8 = new Type();
+		Type subType9 = new Type();
+		Type subType10 = new Type();
+		
+		subType1.setIdUser(userProfileService.getUser(1L));
+		subType2.setIdUser(userProfileService.getUser(1L));
+		subType3.setIdUser(userProfileService.getUser(1L));
+		subType4.setIdUser(userProfileService.getUser(1L));
+		subType5.setIdUser(userProfileService.getUser(1L));
+		subType6.setIdUser(userProfileService.getUser(1L));
+		subType7.setIdUser(userProfileService.getUser(1L));
+		subType8.setIdUser(userProfileService.getUser(1L));
+		subType9.setIdUser(userProfileService.getUser(1L));
+		subType10.setIdUser(userProfileService.getUser(1L));
 
-			parentType.setTypeName("Электроника" + i);
-			subType1.setTypeName("Телевизор" + i);
-			subType2.setTypeName("Телефон" + i);
+		subType1.setTypeName("Электроника");
+		subType2.setTypeName("Телевизор");
+		subType3.setTypeName("Телефон");
+		subType4.setTypeName("Компьютер");
+		subType5.setTypeName("Мобильный телефон");
+		subType6.setTypeName("Ноутбук");
+		subType7.setTypeName("Мебель");
+		subType8.setTypeName("Шкаф");
+		subType9.setTypeName("Стол");
+		subType10.setTypeName("Одежда");
 
-			typeService.register(parentType);
-			typeService.register(subType1);
-			typeService.register(subType2);
+		subType2.setParentType(subType1);
+		subType3.setParentType(subType1);
+		subType4.setParentType(subType1);
+		subType5.setParentType(subType3);
+		subType6.setParentType(subType4);
+		subType8.setParentType(subType7);
+		subType9.setParentType(subType7);
 
-			subType1.setParentType(parentType);
-			typeService.update(subType1);
-			subType2.setParentType(parentType);
-			typeService.update(subType2);
-		}
-
-		// TypeFilter tFilter = new TypeFilter();
-		// tFilter.setFetchParentType(true);
-		// tFilter.setParentType(parentType);
-		//
-		// allTypes = typeService.find(tFilter);
-		// for(Type t : allTypes){
-		// System.out.println(t);
-		// }
+		typeService.register(subType1);
+		typeService.register(subType2);
+		typeService.register(subType3);
+		typeService.register(subType4);
+		typeService.register(subType5);
+		typeService.register(subType6);
+		typeService.register(subType7);
+		typeService.register(subType8);
+		typeService.register(subType9);
+		typeService.register(subType10);
+		
+		Type type = new Type();
+		type.setIdUser(userProfileService.getUser(1L));
+		type.setTypeName("Другие");
+		typeService.register(type);
 
 	}
+
+	// TypeFilter tFilter = new TypeFilter();
+	// tFilter.setFetchParentType(true);
+	// tFilter.setParentType(parentType);
+	//
+	// allTypes = typeService.find(tFilter);
+	// for(Type t : allTypes){
+	// System.out.println(t);
+	// }
+
+	// }
 }

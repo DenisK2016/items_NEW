@@ -34,7 +34,7 @@ public class DeleteProductTest {
 
 			Product product1 = new Product();
 
-			product1.setLimit("2 шт/год" + i);
+			product1.setWeight(233.0);
 			product1.setNameProduct("TVset" + i);
 			product1.setPriceProduct(new BigDecimal(1000000));
 			product1.setStatus(true);

@@ -1,56 +1,142 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
-	<table class="regprod">
-		<tr>
-			<td><a wicket:id="BackToPackages">Back</a>
-				<h2>Регистрация нового пакета</h2> <br>
-				<form wicket:id="formRegPack">
-					<span wicket:id="feedback"></span> <input type="text"
-						wicket:id="id" />Введите трекинг-код(В будушем код изменить нельзя):<br> Выберите
-					получчателя по Id:<br> <select wicket:id="idRecipient"></select><br>
-					<input type="text" wicket:id="price" />Цена растаможки:<br> <input
-						type="text" wicket:id="weight" />Вес всей посылки:<br>
-					<wicket:enclosure child="idUser">
-				Выберите инспектора посылки:<br>
-						<select wicket:id="idUser"></select>
-						<br>
-					</wicket:enclosure>
-					<input type="text" wicket:id="date" />Дата прихода:<br> <input
-						type="text" wicket:id="description" />Описание посылки:<br>
-					<input type="text" wicket:id="countrySender" />Страна отправитель:<br>
-					<input type="text" wicket:id="paymentDeadline" />Срок оплаты(пока
-					в днях):<br> <input type="text" wicket:id="fine" />Штраф:<br>
-					<span wicket:id="paid"></span><br> <input type="submit"
-						wicket:id="savePack" value="Сохранить" />
-				</form></td>
-		</tr>
 
+	<table class="regprod"
+		style="margin-left: 36px; font-size: 10pt; width: 34%;">
+		<form wicket:id="formRegPack">
 		<tr>
-			<td>
-				<form wicket:id="formProd">
-					<select wicket:id="choiceProduct"></select>
-					<button type="submit" wicket:id="selectProduct">Добавить
-						продукт</button>
-					<input wicket:id="spinner" type="text"></input><br>
-					<table>
-						<tr>
-							<th>Продукты в пакете</th>
-						</tr>
-						<tr wicket:id="addsProd">
-							<td><span wicket:id="addProd">products</span></td>
-							<td><a wicket:id="deleteProd">Удалить</a></td>
-						</tr>
-						<tr wicket:id="existsProd">
-							<td><b><span wicket:id="existProd">products</span></b></td>
-							<td><a wicket:id="delExistProd">Удалить</a></td>
-						</tr>
-					</table>
-				</form>
-			</td>
+			<td colspan="2" align="center"><span style="margin-left: 61%;"
+				wicket:id="regOrUpdate"></span></td>
+
 		</tr>
+		<tr>
+			<td colspan="2"><span wicket:id="feedback"></span></td>
+		</tr>
+		<tr>
+			<td class="field-warning" colspan="2"><span
+				style="font-size: 9pt; font-style: italic;">Важная
+					информация!<br>Для регистрации новой посылки, необходимо
+					сначало выбрать получателя и продукты, которые содержаться в
+					посылке.<br>Поля помеченные звездочками, обязательны для
+					заполнения.
+			</span></td>
+		</tr>
+		<tr>
+			<td align="left">Выберите получателя из списка<br> (если
+				получаетеля нет, то создайте<br> его в соответствующем
+				разделе):<span style="color: red;">*</span>
+			</td>
+			<td align="center"><br> <select class="field"
+				style="width: 143px;" wicket:id="idRecipient"></select></td>
+		</tr>
+		<tr>
+			<td>Введите трекинг-код посылки(в<br> будушем код изменить
+				нельзя без<br> удаления, поэтому вводите внимательно):<span
+				style="color: red;">*</span>
+			</td>
+			<td align="center"><input class="field" type="text"
+				wicket:id="id" placeholder="Трек код" /></td>
+		</tr>
+		<tr>
+			<td>Общая цена всех продуктов в посылке(определяется
+				автоматически в зависимости от продуктов в корзине):</td>
+			<td align="center"><input class="field" type="text"
+				wicket:id="price" /></td>
+		</tr>
+		<tr>
+			<td>Общий налог на посылку(определяется автоматически в
+				зависимости от цены и веса продуктов):</td>
+			<td align="center"><input class="field" type="text"
+				wicket:id="tax" /></td>
+		</tr>
+		<tr>
+			<td>Общий вес всей посылки(определяется автоматически в
+				зависимости от продуктов в корзине):</td>
+			<td align="center"><input class="field" type="text"
+				wicket:id="weight" /></td>
+		</tr>
+		<tr>
+			<wicket:enclosure child="idUser">
+				<td>Инспектор посылки(если не выбрать, то установится текущий):</td>
+				<td align="center"><select class="field" style="width: 143px;"
+					wicket:id="idUser"></select></td>
+			</wicket:enclosure>
+		</tr>
+		<tr>
+			<td>Дата прихода посылки(автоматически выберается сегодняшняя
+				дата):</td>
+			<td align="center"><input class="field" type="text"
+				wicket:id="date" /></td>
+		</tr>
+		<tr>
+			<td>Дополнительное описание посылки(любая информация):</td>
+			<td align="center"><input class="field" type="text"
+				wicket:id="description" placeholder="Описание" /></td>
+		</tr>
+		<tr>
+			<td>Страна отправитель:<span style="color: red;">*</span></td>
+			<td align="center"><input class="field" type="text"
+				wicket:id="countrySender" placeholder="Страна" /></td>
+		</tr>
+		<tr>
+			<td>Количество дней на оплату посылки<br>(устанавливается
+				автоматически в <br>зависимости от настроек)
+			</td>
+			<td align="center"><input class="field" type="text"
+				wicket:id="paymentDeadline" /></td>
+		</tr>
+		<tr>
+
+			<td>Штраф(начисляется автоматически<br> в зивасимости от
+				настроек):
+			</td>
+			<td align="center"><input class="field" type="text"
+				wicket:id="fine" placeholder="0" /></td>
+
+		</tr>
+		<tr>
+			<wicket:enclosure child="paid">
+				<td>Статус посылки:</td>
+				<td align="center"><span wicket:id="paid"></span></td>
+			</wicket:enclosure>
+		</tr>
+		<tr>
+			<td colspan="2"><input class="field" type="submit"
+				wicket:id="savePack" value="Сохранить" /></td>
+		</tr>
+		</form>
 	</table>
-	<wicket:fragment wicket:id="tooltip-fragment">
-		<span wicket:id="name" class="fragment">[description]</span>
-	</wicket:fragment>
+	<table class="regprod"
+		style="margin-left: 495px; margin-top: 80px; font-size: 10pt; width: 30%; height: 20%;">
+		<form wicket:id="formProd">
+			<tr>
+				<td>Выберите продукты и их количество<br>(если продукта
+					нет, то создайте<br> его в соответствующем разделе) Продукты
+					потом изменить нельзя:<span style="color: red;">*</span>
+				</td>
+			</tr>
+		<tr>
+
+			<td><select class="field" wicket:id="choiceProduct"></select>
+				<button class="field" type="submit" wicket:id="selectProduct">Добавить
+					продукт</button> <input class="field" style="width: 11%" wicket:id="spinner"
+				type="text"></input><br>
+				<table>
+					<tr>
+						<th>Продукты в корзине</th>
+					</tr>
+					<tr wicket:id="addsProd">
+						<td><span wicket:id="addProd">products</span></td>
+						<td><a class="field" wicket:id="deleteProd">Удалить</a></td>
+					</tr>
+					<tr wicket:id="existsProd">
+						<td><b><span wicket:id="existProd">products</span></b></td>
+						<td></td>
+					</tr>
+				</table></td>
+		</tr>
+		</form>
+	</table>
+	<a wicket:id="BackToPackages">Back</a>
 </wicket:panel>
 
 

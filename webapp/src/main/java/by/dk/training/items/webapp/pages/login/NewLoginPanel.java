@@ -9,6 +9,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.WindowClosedCallback;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -40,6 +41,7 @@ public class NewLoginPanel extends Panel {
 		super(modalWindow.getContentId());
 		userProfile = new UserProfile();
 		userCredentials = new UserCredentials();
+
 		this.modalWindow = modalWindow;
 
 	}
@@ -50,7 +52,8 @@ public class NewLoginPanel extends Panel {
 
 		Form<UserProfile> form = new Form<UserProfile>("formRegUser",
 				new CompoundPropertyModel<UserProfile>(userProfile));
-		form.add(new FeedbackPanel("feedback"));
+		FeedbackPanel feedBackPanel = new FeedbackPanel("feedback");
+		form.add(feedBackPanel.setOutputMarkupId(true));
 
 		TextField<String> login = new TextField<String>("login");
 		login.setRequired(true);
@@ -102,20 +105,50 @@ public class NewLoginPanel extends Panel {
 		rank.add(AttributeModifier.append("title", "Укажите звание"));
 		form.add(rank);
 
-		form.add(new AjaxSubmitLink("save") {
+		final ModalWindow modal2;
+		add(modal2 = new ModalWindow("modal2"));
+
+		modal2.setResizable(false);
+		modal2.setCssClassName("modal_window");
+		modal2.setInitialHeight(100);
+		modal2.setInitialWidth(700);
+		this.setOutputMarkupId(true);
+
+		modal2.setWindowClosedCallback(new WindowClosedCallback() {
+
+			@Override
+			public void onClose(AjaxRequestTarget target) {
+				target.add(NewLoginPanel.this);
+
+			}
+		});
+		AjaxSubmitLink link = new AjaxSubmitLink("save") {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
-				String s = "http://localhost:8081/";
-				String text = String.format(
-						"Здравствуйте %s. Вы были зарегистрированы на сервисе. Пожалуйста не отвечайте на это письмо. Перейдите по ссылке %s",
-						userProfile.getLogin());
-				new Sender("denisov27111990@gmail.com", "php948409php").send("Регистрация в сервисе", text,
-						userCredentials.getEmail());
-				userProfileService.register(userProfile, userCredentials);
-				modalWindow.close(target);
+				try{
+					userProfileService.register(userProfile, userCredentials);
+					String s = "http://localhost:8081/";
+					String text = String.format(
+							"Здравствуйте %s. Вы были зарегистрированы на сервисе. Пожалуйста не отвечайте на это письмо. Перейдите по ссылке",
+							userProfile.getLogin());
+					new Sender("denisov27111990@gmail.com", "php948409php").send("Регистрация в сервисе", text,
+							userCredentials.getEmail());
+					modalWindow.close(target);
+				}catch(Exception e){
+					modal2.setContent(new PanelError(modal2));
+					modal2.show(target);
+				}
 			}
-		}.add(AttributeModifier.append("title", "Сохранить")));
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				super.onError(target, form);
+				target.add(feedBackPanel);
+			}
+		};
+		link.add(AttributeModifier.append("title", "Сохранить"));
+		form.add(link);
 
 		form.add(new AjaxLink("cancel") {
 			@Override

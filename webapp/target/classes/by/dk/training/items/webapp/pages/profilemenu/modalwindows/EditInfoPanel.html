@@ -1,0 +1,33 @@
+<wicket:panel>
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen"
+		title="Stylesheet" />
+	<form wicket:id="formEdit">
+
+		<table class="regprod">
+			<tr>
+				<td><b>Введите новое значение:</b></td>
+				<wicket:enclosure child="password">
+					<td><input type="text" wicket:id="password" /></td>
+				</wicket:enclosure>
+				<wicket:enclosure child="firstName">
+					<td><input type="text" wicket:id="firstName" /></td>
+				</wicket:enclosure>
+				<wicket:enclosure child="lastName">
+					<td><input type="text" wicket:id="lastName" /></td>
+				</wicket:enclosure>
+				<wicket:enclosure child="post">
+					<td><input type="text" wicket:id="post" /></td>
+				</wicket:enclosure>
+				<wicket:enclosure child="rank">
+					<td><select class="field" wicket:id="rank"></select></td>
+				</wicket:enclosure>
+			</tr>
+			<tr>
+				<td colspan="6">
+					<button class="field" wicket:id="save">save</button>
+					<button class="field" wicket:id="cancel">cancel</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+</wicket:panel>

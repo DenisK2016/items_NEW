@@ -40,10 +40,29 @@ public class TypeDaoImpl extends AbstractDaoImpl<Type, Long> implements TypeDao 
 							// таблица,
 							// а from.get... - это конкретная колонка
 
-		if (filter.getTypeName() != null || filter.getParentType() != null) {
+		boolean c = filter.getTypeName() != null;
+		boolean d = filter.getParentType() != null;
+		boolean e = filter.getUser() != null;
+		boolean f = filter.getId() != null;
+		boolean g = "null".equals(filter.getNullParent());
+		boolean h = filter.getChilldType() != null;
+		boolean b = c || d || e || f || g || h;
+		if (b) {
+			Predicate idEqualCondition = cb.equal(from.get(Type_.id), filter.getId());
 			Predicate tNameEqualCondition = cb.equal(from.get(Type_.typeName), filter.getTypeName());
 			Predicate pTypeEqualCondition = cb.equal(from.get(Type_.parentType), filter.getParentType());
-			cq.where(cb.or(tNameEqualCondition, pTypeEqualCondition));
+			Predicate userEqualCondition = cb.equal(from.get(Type_.idUser), filter.getUser());
+			if (g) {
+				pTypeEqualCondition = cb.isNull(from.get(Type_.parentType));
+			}
+			if (h) {
+				Predicate typesEqualCondition = cb.isMember(filter.getChilldType(), from.get(Type_.childTypes));
+				cq.where(cb.or(tNameEqualCondition, pTypeEqualCondition, userEqualCondition, idEqualCondition,
+						typesEqualCondition));
+			} else {
+				cq.where(cb.or(tNameEqualCondition, pTypeEqualCondition, userEqualCondition, idEqualCondition));
+			}
+
 		}
 
 		// set fetching
@@ -51,13 +70,21 @@ public class TypeDaoImpl extends AbstractDaoImpl<Type, Long> implements TypeDao 
 			from.fetch(Type_.parentType, JoinType.LEFT);
 		}
 
+		if (filter.isFetchUser()) {
+			from.fetch(Type_.idUser, JoinType.LEFT);
+		}
+
+		if (filter.isFetchChildTypes()) {
+			from.fetch(Type_.childTypes, JoinType.LEFT);
+		}
+
 		// set sort params
 		if (filter.getSortProperty() != null) {
-				cq.orderBy(new OrderImpl(from.get(filter.getSortProperty()), filter.isSortOrder()));
+			cq.orderBy(new OrderImpl(from.get(filter.getSortProperty()), filter.isSortOrder()));
 
 		}
 
-		TypedQuery<Type> q = em.createQuery(cq);
+		TypedQuery<Type> q = em.createQuery(cq.distinct(true));
 
 		// set paging
 		if (filter.getOffset() != null && filter.getLimit() != null) {

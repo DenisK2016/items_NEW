@@ -4,13 +4,17 @@ import java.io.Serializable;
 
 import javax.persistence.metamodel.SingularAttribute;
 
-public class RecipientFilter implements Serializable{
+import by.dk.training.items.datamodel.UserProfile;
+
+public class RecipientFilter implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private Long id;
 	private String name;
 	private String city;
 	private String address;
+	private UserProfile user;
 
 	private SingularAttribute sortProperty;
 	private boolean sortOrder;
@@ -18,6 +22,31 @@ public class RecipientFilter implements Serializable{
 	private Integer limit;
 
 	private boolean isFetchPackages;
+	private boolean isFetchUser;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public UserProfile getUser() {
+		return user;
+	}
+
+	public void setUser(UserProfile user) {
+		this.user = user;
+	}
+
+	public boolean isFetchUser() {
+		return isFetchUser;
+	}
+
+	public void setFetchUser(boolean isFetchUser) {
+		this.isFetchUser = isFetchUser;
+	}
 
 	public boolean isFetchPackages() {
 		return isFetchPackages;

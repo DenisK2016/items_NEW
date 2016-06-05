@@ -1,20 +1,31 @@
 <wicket:panel>
-	<table class="regprod">
-		<tr>
-			<td><a wicket:id="BackToRecipients">Back</a>
-				<h2>Регистрация нового получаетеля</h2> <br>
-				<form wicket:id="formRegRec">
-					<span wicket:id="feedback" /> <input type="text" wicket:id="name" />Имя
-					получателя<br> <input type="text" wicket:id="city" />Город
-					получателя<br> <input type="text" wicket:id="address" />
-					Адрес получателя<br> <input type="submit"
-						wicket:id="sendButton" value="Сохранить" />
-				</form></td>
-		</tr>
-	</table>
-	<wicket:fragment wicket:id="tooltip-fragment">
-		<span wicket:id="name" class="fragment">[description]</span>
-	</wicket:fragment>
+	<form wicket:id="formRegRec">
+		<table class="regprod">
+			<tr>
+				<td colspan="2" align="center"><span wicket:id="regOrUpdate"></span></td>
+			</tr>
+			<tr>
+				<td><span wicket:id="feedback" /></td>
+			</tr>
+			<tr>
+				<td>Полное имя получателя</td>
+				<td><input class="field" type="text" wicket:id="name" /></td>
+			</tr>
+			<tr>
+				<td>Город получателя</td>
+				<td><input class="field" type="text" wicket:id="city" /></td>
+			</tr>
+			<tr>
+				<td>Адрес получателя</td>
+				<td><input class="field" type="text" wicket:id="address" /></td>
+			</tr>
+			<tr>
+				<td><input class="field" type="submit" wicket:id="sendButton"
+					value="Сохранить" /></td>
+			</tr>
+		</table>
+		<a wicket:id="BackToRecipients">Back</a>
+	</form>
 </wicket:panel>
 
 

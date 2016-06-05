@@ -9,24 +9,17 @@
 <link rel="stylesheet" href="style.css" type="text/css" media="screen"
 	title="Stylesheet" />
 </head>
-<body>
-	<div id="hd">
-		<div id="logo">
-			<img src="logo.jpg" width="84px" height="98px"
-				alt="Таможенный комитет" border="1" />
-			<!-- <h1>Wicket</h1> -->
-			<h3 id="gos">Государственный</h3>
-			<h3 id="tom">Таможенный</h3>
-			<h3 id="kom">Комитет</h3>
-			<h4 id="rb">Республики Беларусь</h4>
-		</div>
+<body style="width: 86%;">
+	<div id="hd" style="margin-top: -95px;">
 		<wicket:container wicket:id="menu-panel"></wicket:container>
 	</div>
-	<div id="bd">
+	<div id="bd" class="body-container">
 		<wicket:child />
 	</div>
 	<div class="ft" wicket:id="footer">
-		<div class="copyright">©<span wicket:id="current-year" /></div>
+		<div class="copyright">
+			©<span wicket:id="current-year" />
+		</div>
 	</div>
 </body>
 </html>

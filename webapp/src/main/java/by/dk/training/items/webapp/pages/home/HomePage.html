@@ -1,3 +1,52 @@
 <wicket:extend>
-	<h2>Home</h2>
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen"
+		title="Stylesheet" />
+	<table style="color: white;">
+		<tr>
+			<th colspan="2" align="center">Добро пожаловать в систему. Вы
+				зашли как <span wicket:id="role">[role]</span>
+			</th>
+		</tr>
+		<wicket:enclosure child="allpacks">
+			<tr>
+				<td>Всего пакетов(штуки):</td>
+				<td align="center"><p wicket:id="allpacks"></p></td>
+			</tr>
+		</wicket:enclosure>
+		<wicket:enclosure child="month">
+			<tr>
+				<td>Посылок за предыдущий месяц(штук):</td>
+				<td align="center"><p wicket:id="month"></p></td>
+			</tr>
+		</wicket:enclosure>
+
+		<tr>
+			<td><wicket:enclosure child="datestart">Количество посылок с <input
+						type="text" style="width: 85px;" class="field"
+						wicket:id="datestart" />
+				</wicket:enclosure> <wicket:enclosure child="dateend"> по <input
+						type="text" style="width: 85px;" class="field" wicket:id="dateend" />:</wicket:enclosure>
+			</td>
+			<wicket:enclosure child="quantity">
+				<td align="center"><p wicket:id="quantity"></p></td>
+			</wicket:enclosure>
+		</tr>
+		<wicket:enclosure child="maxprice">
+			<tr>
+				<td>Самая дорогая посылка(бел.рубли):</td>
+				<td align="center"><p wicket:id="maxprice"></p></td>
+			</tr>
+		</wicket:enclosure>
+		<wicket:enclosure child="city">
+			<tr>
+				<td>Город в который чаще всего приходят посылки</td>
+				<td align="center"><p wicket:id="city"></p></td>
+			</tr>
+		</wicket:enclosure>
+		<wicket:enclosure child="space">
+			<tr height="300px">
+				<td wicket:i="space"></td>
+			</tr>
+		</wicket:enclosure>
+	</table>
 </wicket:extend>

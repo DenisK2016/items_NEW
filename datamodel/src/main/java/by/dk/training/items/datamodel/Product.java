@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,11 +28,11 @@ public class Product implements Serializable {
 	@Column(nullable = false)
 	private Long id;
 
-	@Column(name = "name_product", nullable = false, unique = true)
+	@Column(name = "name_product", nullable = false, unique = false)
 	private String nameProduct;
 
-	@Column(name = "\"limit\"", nullable = false)
-	private String limit;
+	@Column(name = "\"weight\"", nullable = false)
+	private Double weight = 0.0;
 
 	@Column(name = "price_product", nullable = false)
 	private BigDecimal priceProduct;
@@ -44,8 +45,20 @@ public class Product implements Serializable {
 	@ManyToMany(targetEntity = Type.class, fetch = FetchType.LAZY)
 	private List<Type> types = new ArrayList<>();
 
+	@ManyToOne(targetEntity = UserProfile.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user")
+	private UserProfile idUser;
+
 	public Product() {
 		super();
+	}
+
+	public UserProfile getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(UserProfile idUser) {
+		this.idUser = idUser;
 	}
 
 	public List<Type> getTypes() {
@@ -81,12 +94,12 @@ public class Product implements Serializable {
 		this.nameProduct = nameProduct;
 	}
 
-	public String getLimit() {
-		return limit;
+	public Double getWeight() {
+		return weight;
 	}
 
-	public void setLimit(String limit) {
-		this.limit = limit;
+	public void setWeight(Double weight) {
+		this.weight = weight;
 	}
 
 	public BigDecimal getPriceProduct() {
@@ -107,7 +120,7 @@ public class Product implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Products [id=" + id + ", nameProduct=" + nameProduct + ", limit=" + limit + ", priceProduct="
+		return "Products [id=" + id + ", nameProduct=" + nameProduct + ", limit=" + weight + ", priceProduct="
 				+ priceProduct + ", status=" + status + ", Types product=" + types + "]";
 	}
 
@@ -116,7 +129,7 @@ public class Product implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((limit == null) ? 0 : limit.hashCode());
+		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
 		result = prime * result + ((nameProduct == null) ? 0 : nameProduct.hashCode());
 		result = prime * result + ((priceProduct == null) ? 0 : priceProduct.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
@@ -143,11 +156,11 @@ public class Product implements Serializable {
 		} else if (!id.equals(other.id)) {
 			return false;
 		}
-		if (limit == null) {
-			if (other.limit != null) {
+		if (weight == null) {
+			if (other.weight != null) {
 				return false;
 			}
-		} else if (!limit.equals(other.limit)) {
+		} else if (!weight.equals(other.weight)) {
 			return false;
 		}
 		if (nameProduct == null) {

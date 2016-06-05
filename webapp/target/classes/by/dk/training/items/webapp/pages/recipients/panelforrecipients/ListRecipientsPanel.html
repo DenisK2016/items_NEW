@@ -1,28 +1,50 @@
 <wicket:panel>
-	<table cellspacing="0" class="dataview">
-		<tr>
-			<th></th>
-			<th wicket:id="orderById">ID</th>
-			<th wicket:id="orderByName">Name</th>
-			<th wicket:id="orderByCity">City</th>
-			<th wicket:id="orderByAddress">Address</th>
-			<wicket:enclosure child="orderByUser">
-				<th wicket:id="orderByUser">User</th>
-			</wicket:enclosure>
-		</tr>
-		<tr wicket:id="recipientlist">
-			<td><a wicket:id="infoRecipient">Выбрать</a></td>
-			<td><span wicket:id="recipientid">[recipientid]</span></td>
-			<td><span wicket:id="recipientname">[recipientname]</span></td>
-			<td><span wicket:id="recipientcity">[recipientcity]</span></td>
-			<td><span wicket:id="recipientaddress">[recipientaddress]</span></td>
-			<wicket:enclosure child="idUser">
-				<td><span wicket:id="idUser">[users]</span></td>
-			</wicket:enclosure>
-			<td><a wicket:id="deletelink">Удалить</a> <a
-				wicket:id="updateRecipient">Изменить</a></td>
-		</tr>
-	</table>
-	<span wicket:id="navigator">[dataview navigator]</span>
+	<div wicket:id="container">
+		<table cellspacing="0" class="dataview-recipient">
+			<tr>
+				<td>Найти</td>
+				<td><input style="margin-left: 18px;" class="field-recipient"
+					type="text" wicket:id="idFilter" placeholder="по id" /></td>
+				<td><input style="margin-left: 58px;" class="field-recipient"
+					type="text" wicket:id="nameFilter" placeholder="по ФИО" /></td>
+				<td><input style="margin-left: 6px;" class="field-recipient"
+					type="text" wicket:id="cityFilter" placeholder="по городу" /></td>
+				<td><input style="margin-left: 36px;" class="field-recipient"
+					type="text" wicket:id="addressFilter" placeholder="по адресу" /></td>
+				<td><input class="field-recipient" type="text"
+					wicket:id="userFilter" placeholder="по создателю" /></td>
+			</tr>
+			<tr>
+				<th></th>
+				<th wicket:id="orderById">Номер ID</th>
+				<th wicket:id="orderByName">Ф.И.О.</th>
+				<th wicket:id="orderByCity">Город</th>
+				<th wicket:id="orderByAddress">Адрес</th>
+				<wicket:enclosure child="orderByUser">
+					<th wicket:id="orderByUser">Создатель</th>
+				</wicket:enclosure>
+			</tr>
+			<tr wicket:id="recipientlist">
+				<td align="center"><a class="icon_select"
+					wicket:id="infoRecipient">&#10148;</a></td>
+				<td align="center"><span wicket:id="recipientid">[recipientid]</span></td>
+				<td align="center"><span wicket:id="recipientname">[recipientname]</span></td>
+				<td align="center"><span wicket:id="recipientcity">[recipientcity]</span></td>
+				<td align="center"><span wicket:id="recipientaddress">[recipientaddress]</span></td>
+				<wicket:enclosure child="idUser">
+					<td align="center"><span wicket:id="idUser">[users]</span></td>
+				</wicket:enclosure>
+				<td><wicket:enclosure child="deletelink">
+						<a wicket:id="deletelink" class="icon_delete">&#10007;</a>
+					</wicket:enclosure></td>
+				<wicket:enclosure child="updateRecipient">
+					<td align="center"><a class="icon-edit"
+						wicket:id="updateRecipient">&#9997;</a></td>
+				</wicket:enclosure>
+			</tr>
+		</table>
+		<span wicket:id="navigator">[dataview navigator]</span>
+	</div>
 	<div wicket:id="modal1"></div>
+	<div wicket:id="modalUpdate"></div>
 </wicket:panel>

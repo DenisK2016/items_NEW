@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -36,8 +38,20 @@ public class Recipient implements Serializable {
 	@OneToMany(mappedBy = "idRecipient", fetch = FetchType.LAZY)
 	private Set<Package> packages = new HashSet<>();
 
+	@ManyToOne(targetEntity = UserProfile.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user")
+	private UserProfile idUser;
+
 	public Recipient() {
 		super();
+	}
+
+	public UserProfile getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(UserProfile idUser) {
+		this.idUser = idUser;
 	}
 
 	public Set<Package> getPackages() {

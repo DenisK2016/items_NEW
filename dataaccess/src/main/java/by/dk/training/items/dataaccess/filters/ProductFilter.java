@@ -6,16 +6,19 @@ import java.math.BigDecimal;
 import javax.persistence.metamodel.SingularAttribute;
 
 import by.dk.training.items.datamodel.Type;
+import by.dk.training.items.datamodel.UserProfile;
 
-public class ProductFilter implements Serializable{
+public class ProductFilter implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private Long id;
 	private String nameProduct;
-	private String limitProduct;
+	private Double weightProduct;
 	private BigDecimal priceProduct;
 	private Boolean status;
 	private Type types;
+	private UserProfile user;
 
 	private SingularAttribute sortProperty;
 	private boolean sortOrder;
@@ -23,6 +26,31 @@ public class ProductFilter implements Serializable{
 	private Integer limit;
 
 	private boolean isFetchType;
+	private boolean isFetchUser;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public boolean isFetchUser() {
+		return isFetchUser;
+	}
+
+	public void setFetchUser(boolean isFetchUser) {
+		this.isFetchUser = isFetchUser;
+	}
+
+	public UserProfile getUser() {
+		return user;
+	}
+
+	public void setUser(UserProfile user) {
+		this.user = user;
+	}
 
 	public Type getTypes() {
 		return types;
@@ -40,12 +68,12 @@ public class ProductFilter implements Serializable{
 		this.nameProduct = nameProduct;
 	}
 
-	public String getLimitProduct() {
-		return limitProduct;
+	public Double getWeightProduct() {
+		return weightProduct;
 	}
 
-	public void setLimitProduct(String limitProduct) {
-		this.limitProduct = limitProduct;
+	public void setWeightProduct(Double weightProduct) {
+		this.weightProduct = weightProduct;
 	}
 
 	public BigDecimal getPriceProduct() {

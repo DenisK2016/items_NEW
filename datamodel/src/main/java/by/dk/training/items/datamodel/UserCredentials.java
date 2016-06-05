@@ -12,10 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "user_credentials")
-public class UserCredentials implements Serializable{
+public class UserCredentials implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,6 +33,7 @@ public class UserCredentials implements Serializable{
 	private String lastName;
 
 	@Column
+	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date created;
 
 	@Column(nullable = false)

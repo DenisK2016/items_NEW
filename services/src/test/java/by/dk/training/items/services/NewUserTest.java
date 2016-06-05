@@ -26,21 +26,40 @@ public class NewUserTest {
 //			userService.delete(user.getId());
 //		}
 
-		for (int i = 0; i < 20; i++) {
+//		for (int i = 0; i < 20; i++) {
 
-			UserProfile user = new UserProfile();
-			UserCredentials userCred = new UserCredentials();
+			UserProfile user1 = new UserProfile();
+			UserCredentials userCred1 = new UserCredentials();
 
-			user.setLogin("Admin" + i);
-			user.setPassword("2345345");
+			user1.setLogin("Admin");
+			user1.setPassword("123456");
 
-			userCred.setEmail(i + "@gmail.com");
-			userCred.setFirstName("John" + i);
-			userCred.setLastName("Statethem" + i);
-
-			userService.register(user, userCred);
+			userCred1.setEmail("admin@gmail.com");
+			userCred1.setFirstName("jason");
+			userCred1.setLastName("Statham");
+			userService.register(user1, userCred1);
 			
-		}
+			UserProfile user2 = new UserProfile();
+			UserCredentials userCred2 = new UserCredentials();
+			user2.setLogin("Komandir");
+			user2.setPassword("123456");
+
+			userCred2.setEmail("komandir@gmail.com");
+			userCred2.setFirstName("Dow");
+			userCred2.setLastName("Jones");
+			userService.register(user2, userCred2);
+			
+			UserProfile user3 = new UserProfile();
+			UserCredentials userCred3 = new UserCredentials();
+			user3.setLogin("User");
+			user3.setPassword("123456");
+
+			userCred3.setEmail("user@gmail.com");
+			userCred3.setFirstName("Alexander");
+			userCred3.setLastName("Pushkin");
+			userService.register(user3, userCred3);
+			
+//		}
 
 //		UserFilter userFilter = new UserFilter();
 //		userFilter.setEmail("4@gmail.com");
